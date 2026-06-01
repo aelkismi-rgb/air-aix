@@ -36,19 +36,22 @@
   .course{margin-top:1.6vh;width:92%;border-radius:12px;padding:1.2vh 1vw;
     display:flex;align-items:center;gap:0.9vw;
     border-left:6px solid var(--cc,#888);background:rgba(255,255,255,0.05);}
-  .course-ico{flex:0 0 auto;width:2.6vw;height:2.6vw;border-radius:50%;
+  .course-ico{position:relative;flex:0 0 auto;width:3vw;height:3vw;}
+  .course-ico img{width:100%;height:100%;object-fit:contain;filter:brightness(0) invert(1);}
+  .course-badge{position:absolute;right:-0.4vw;bottom:-0.4vw;
+    width:1.6vw;height:1.6vw;border-radius:50%;
     display:flex;align-items:center;justify-content:center;
-    background:var(--cc,#888);color:#06121f;font-size:1.6vw;font-weight:900;}
+    font-size:1vw;font-weight:900;color:#06121f;background:var(--cc,#888);
+    border:2px solid var(--fond1);}
   .course-txt{font-size:1vw;font-weight:700;color:var(--cc,#fff);}
   .course-det{font-size:0.72vw;color:var(--txt-doux);margin-top:0.2vh;line-height:1.3;}
 
-  .droite{flex:1;display:flex;flex-direction:column;gap:1vh;min-height:0;}
+  .droite{flex:1;display:flex;flex-direction:column;gap:2.2vh;min-height:0;justify-content:center;}
   .sous-titre{font-size:1vw;font-weight:600;color:var(--txt-doux);margin-bottom:0.3vh;}
 
   /* Bulletin en haut */
   .bulletin{background:var(--carte);border:1px solid var(--bord);border-radius:10px;
-    padding:0.9vh 1vw;font-size:0.72vw;line-height:1.4;color:#cfe0ee;
-    max-height:9vh;overflow-y:auto;}
+    padding:1vh 1.1vw;font-size:0.74vw;line-height:1.45;color:#cfe0ee;}
 
   .polluants{display:grid;grid-template-columns:repeat(5,1fr);gap:0.7vw;}
   .pol{background:var(--carte);border:1px solid var(--bord);border-radius:10px;
@@ -64,8 +67,8 @@
   .prev-info{font-size:0.78vw;}
   .prev-info .d{color:var(--txt-doux);font-size:0.66vw;}
 
-  /* Conseils : icone fine blanche + badge transparent par dessus */
-  .conseils{display:flex;flex-direction:column;gap:0.6vh;}
+  /* Conseils : 2 colonnes, icone fine blanche + badge transparent */
+  .conseils{display:grid;grid-template-columns:repeat(2,1fr);gap:0.6vh 1.4vw;}
   .conseil{display:flex;gap:0.9vw;align-items:flex-start;}
   .conseil-ico{position:relative;flex:0 0 auto;width:2.2vw;height:2.2vw;}
   .conseil-ico svg{width:100%;height:100%;stroke:#fff;fill:none;stroke-width:1.6;
@@ -136,9 +139,9 @@
 
   // Icones fines (SVG trait blanc)
   const ICONES={
-    activite:'<svg viewBox="0 0 24 24"><circle cx="13" cy="4" r="2"/><path d="M13 6l-2 5 3 2v5"/><path d="M11 11l-4 1-2 4"/><path d="M14 13l4 1"/></svg>',
+    activite:'<img src="data:image/png;base64,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" style="width:100%;height:100%;object-fit:contain;filter:brightness(0) invert(1);"/>',
     sensibles:'<svg viewBox="0 0 24 24"><path d="M12 21c-4-3-7-6-7-10a4 4 0 0 1 7-2 4 4 0 0 1 7 2c0 4-3 7-7 10z"/></svg>',
-    deplacements:'<svg viewBox="0 0 24 24"><circle cx="6" cy="17" r="3"/><circle cx="18" cy="17" r="3"/><path d="M6 17l4-7h5l3 7"/><path d="M10 10l2-3h3"/></svg>',
+    deplacements:'<img src="data:image/png;base64,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" style="width:100%;height:100%;object-fit:contain;filter:brightness(0) invert(1);"/>',
     airint:'<svg viewBox="0 0 24 24"><path d="M3 8h12a3 3 0 1 0-3-3"/><path d="M3 14h16a3 3 0 1 1-3 3"/></svg>',
     conseil:'<svg viewBox="0 0 24 24"><path d="M9 18h6"/><path d="M10 21h4"/><path d="M12 3a6 6 0 0 0-4 10c1 1 1 2 1 3h6c0-1 0-2 1-3a6 6 0 0 0-4-10z"/></svg>'
   };
@@ -149,7 +152,11 @@
   }
 
   function verdictCourse(niveau, temp, pluie, vent){
+    const h = new Date().getHours();
+    const mois = new Date().getMonth()+1;
+    const ete = (mois>=5 && mois<=9);
     let probleme=[]; let gravite=0;
+
     if(niveau>=4){gravite=2;probleme.push("air mauvais");}
     else if(niveau===3){gravite=Math.max(gravite,1);probleme.push("air dégradé");}
     if(temp>=33){gravite=2;probleme.push("forte chaleur ("+Math.round(temp)+"°C)");}
@@ -157,9 +164,30 @@
     else if(temp<=2){gravite=Math.max(gravite,1);probleme.push("froid ("+Math.round(temp)+"°C)");}
     if(pluie>=3){gravite=Math.max(gravite,1);probleme.push("pluie");}
     if(vent>=40){gravite=Math.max(gravite,1);probleme.push("vent fort");}
-    if(gravite===0) return {ico:"✓",txt:"Idéal pour courir",det:"Air de bonne qualité, météo favorable ("+Math.round(temp)+"°C).",couleur:"#50F0E6"};
-    if(gravite===1) return {ico:"!",txt:"Course possible avec prudence",det:"À surveiller : "+probleme.join(", ")+". Adaptez l'intensité et l'horaire.",couleur:"#F0E641"};
-    return {ico:"!",txt:"Course déconseillée",det:"Conditions défavorables : "+probleme.join(", ")+". Préférez l'intérieur.",couleur:"#FF5050"};
+
+    // Suggestion de creneau selon l'heure et la chaleur
+    let creneau="";
+    if(temp>=27 && ete){
+      if(h>=11 && h<18) creneau=" Plutôt en fin de journée (après 18h), quand il fait moins chaud et qu'il y a moins d'ozone.";
+      else if(h<11) creneau=" Bon créneau le matin avant la chaleur.";
+      else creneau=" Bon créneau en soirée, à la fraîche.";
+    } else if(temp<=2){
+      creneau=" Privilégiez le milieu de journée, le plus doux.";
+    }
+
+    if(gravite===0){
+      return {ok:true, txt:"Idéal pour courir",
+        det:"Air de bonne qualité, météo favorable ("+Math.round(temp)+"°C)."+creneau,
+        couleur:"#50F0E6"};
+    } else if(gravite===1){
+      return {ok:false, txt:"Course possible avec prudence",
+        det:"À surveiller : "+probleme.join(", ")+"."+creneau,
+        couleur:"#F0E641"};
+    } else {
+      return {ok:false, txt:"Course déconseillée",
+        det:"Conditions défavorables : "+probleme.join(", ")+". Préférez l'intérieur."+creneau,
+        couleur:"#FF5050"};
+    }
   }
 
   // chaque conseil renvoie aussi "ok" (true=check transparent, false=exclamation transparent)
@@ -171,26 +199,46 @@
     const airOk = niveau<=2;
 
     let activite, actOk;
-    if(niveau>=4){activite=choixDuJour(["Reportez le sport intense en extérieur ; préférez une activité douce ou en intérieur.","Évitez les efforts prolongés dehors aujourd'hui."]);actOk=false;}
-    else if(ozone&&ete){activite="Pic d'ozone l'après-midi : faites votre sport tôt le matin ou en soirée, à l'ombre.";actOk=false;}
-    else if(niveau===3){activite="Privilégiez les parcs, les zones piétonnes et les rues peu circulantes pour vos activités de plein air.";actOk=false;}
-    else {activite=choixDuJour(["Conditions favorables : profitez des parcs et espaces verts pour vos activités de plein air.","Bon moment pour bouger dehors : marche, course ou vélo dans les zones vertes."]);actOk=true;}
+    if(niveau>=4){activite=choixDuJour(["Reportez le sport intense en extérieur ; préférez une activité douce ou en intérieur.","Évitez les efforts prolongés dehors aujourd'hui.","Privilégiez une activité calme et limitez le temps passé dehors."]);actOk=false;}
+    else if(ozone&&ete){activite=choixDuJour(["Pic d'ozone l'après-midi : faites votre sport tôt le matin ou en soirée, à l'ombre.","Évitez l'effort intense entre 12h et 18h, quand l'ozone est au plus haut."]);actOk=false;}
+    else if(niveau===3){activite=choixDuJour(["Privilégiez les parcs, les zones piétonnes et les rues peu circulantes pour vos activités de plein air.","Faites du sport loin du trafic : parcs, chemins, bords de rivière."]);actOk=false;}
+    else {activite=choixDuJour(["Conditions favorables : profitez des parcs et espaces verts pour vos activités de plein air.","Bon moment pour bouger dehors : marche, course ou vélo dans les zones vertes.","Air de bonne qualité : idéal pour une sortie sportive en plein air."]);actOk=true;}
 
     let sensibles, sensOk;
-    if(niveau>=4){sensibles="Personnes sensibles : limitez les sorties et consultez un professionnel en cas de gêne.";sensOk=false;}
+    if(niveau>=4){sensibles=choixDuJour(["Personnes sensibles : limitez les sorties et consultez un professionnel en cas de gêne.","Personnes sensibles : réduisez les efforts et restez attentif aux symptômes (toux, essoufflement).","En cas de gêne respiratoire ou cardiaque, prendre conseil auprès d'un professionnel de santé.","Enfants, personnes âgées, femmes enceintes, asthmatiques, diabétiques et insuffisants cardiaques : redoublez de prudence aujourd'hui."]);sensOk=false;}
     else if(particules&&hiver){sensibles="Particules fines élevées : évitez les abords des routes et le chauffage au bois.";sensOk=false;}
-    else if(niveau>=3){sensibles="N'aggravez pas les effets de la pollution en ajoutant des facteurs irritants (tabac, solvants, fumée de cheminée, pollens, etc.).";sensOk=false;}
-    else {sensibles="Aucune précaution particulière, mais évitez les facteurs irritants (tabac, fumée, solvants).";sensOk=true;}
+    else if(niveau>=3){sensibles=choixDuJour(["N'aggravez pas les effets de la pollution en ajoutant des facteurs irritants (tabac, solvants, fumée de cheminée, pollens, etc.).","Personnes sensibles : surveillez votre respiration et évitez les zones de fort trafic.","En cas de gêne respiratoire ou cardiaque, prendre conseil auprès d'un professionnel de santé.","Asthmatiques, diabétiques, personnes âgées ou cardiaques : limitez les efforts intenses en extérieur."]);sensOk=false;}
+    else {sensibles=choixDuJour(["Aucune précaution particulière, mais évitez les facteurs irritants (tabac, fumée, solvants).","Conditions favorables, y compris pour les personnes sensibles.","En cas de gêne respiratoire ou cardiaque inhabituelle, n'hésitez pas à consulter un professionnel de santé."]);sensOk=true;}
 
     let deplacements;
-    if(niveau>=3) deplacements=choixDuJour(["Privilégiez les transports en commun, le covoiturage ou le vélo.","À vélo, placez-vous devant les voitures au feu rouge et gardez vos distances derrière un véhicule motorisé."]);
-    else deplacements=choixDuJour(["Pour les trajets courts, préférez la marche ou le vélo.","À vélo, placez-vous devant les voitures au feu rouge et gardez vos distances derrière un véhicule motorisé."]);
+    if(niveau>=3) deplacements=choixDuJour([
+      "Privilégiez les transports en commun, le covoiturage ou le vélo.",
+      "À vélo, placez-vous devant les voitures au feu rouge et gardez vos distances derrière un véhicule motorisé.",
+      "Optez pour le covoiturage : moins de voitures, moins de pollution pour tous.",
+      "Reportez si possible les trajets non essentiels en voiture aujourd'hui.",
+      "À pied, empruntez les voies piétonnes ou les rues moins encombrées par le trafic."
+    ], niveau);
+    else deplacements=choixDuJour([
+      "Pour les trajets courts, préférez la marche ou le vélo.",
+      "À vélo, placez-vous devant les voitures au feu rouge et gardez vos distances derrière un véhicule motorisé.",
+      "À pied, empruntez les voies piétonnes ou les rues moins encombrées par le trafic.",
+      "Pensez au covoiturage pour vos trajets domicile-travail.",
+      "Combinez vos déplacements pour limiter les trajets en voiture."
+    ], niveau);
 
     let airint, airOk2;
     if(pluie>=3){airint="La pluie assainit l'air extérieur : c'est le moment d'aérer largement.";airOk2=true;}
-    else if(niveau>=4){airint="Aérez brièvement aux heures les moins polluées (tôt le matin).";airOk2=false;}
-    else if(hiver){airint="Aérez 10 min matin et soir : l'air intérieur est souvent plus pollué que l'extérieur.";airOk2=true;}
-    else {airint="L'aération et la ventilation sont les moyens les plus efficaces d'améliorer votre air intérieur.";airOk2=true;}
+    else if(niveau>=4){airint=choixDuJour([
+      "Aérez brièvement aux heures les moins polluées (tôt le matin).",
+      "Limitez l'aération aux moments où l'air extérieur est le moins chargé."
+    ]);airOk2=false;}
+    else airint=choixDuJour([
+      "Aérez 10 à 15 minutes, deux fois par jour.",
+      "L'aération et la ventilation sont les moyens les plus efficaces d'améliorer votre air intérieur.",
+      "Ouvrez les fenêtres matin et soir : l'air intérieur est souvent plus pollué que l'extérieur.",
+      "Ne bloquez pas les grilles de ventilation : elles renouvellent l'air en continu.",
+      "Aérez après le ménage, la cuisine ou la douche pour évacuer l'humidité et les polluants."
+    ]),airOk2=true;
 
     let pool=[
       "Utilisez des produits ménagers labellisés (Ecocert, NF Environnement, Ecolabel) et sans symbole de danger.",
@@ -201,7 +249,12 @@
     if(hiver&&particules) pool=pool.concat(["Chauffage au bois : appareil performant (Flamme Verte) et bois bien sec.","Pas de brûlage de déchets verts : interdit et très émetteur de particules.","Chauffage à 19°C : bon pour l'air, la santé et la facture."]);
     if(temp>=32) pool=pool.concat(["Forte chaleur : hydratez-vous, restez au frais, fermez les volets le jour.","Canicule et ozone vont souvent ensemble : efforts à la fraîche."]);
     if(temp<=3) pool=pool.concat(["Grand froid : ne faites pas tourner le moteur à l'arrêt.","Limitez les feux de cheminée d'agrément, très émetteurs de particules."]);
-    pool=pool.concat(["Privilégiez le covoiturage ou les transports en commun pour le travail.","Entretenez régulièrement chaudière et appareils de combustion.","Préservez la végétation : elle capte une partie des polluants."]);
+    // Conseils valables toute l'année
+    pool=pool.concat(["Privilégiez le covoiturage ou les transports en commun pour le travail.","Préservez la végétation : elle capte une partie des polluants."]);
+    // Conseil entretien adapté à la saison
+    if(ete) pool=pool.concat(["Entretenez et nettoyez les filtres de votre climatisation pour un air sain.","Réglez la climatisation à 26°C : suffisant pour le confort, sobre en énergie."]);
+    else if(hiver) pool=pool.concat(["Entretenez régulièrement votre chaudière et vos appareils de combustion.","Faites ramoner votre cheminée : un conduit propre pollue moins."]);
+    else pool=pool.concat(["Entretenez vos systèmes de chauffage et de ventilation pour un air intérieur sain."]);
     const conseilJour=choixDuJour(pool, niveau);
 
     return [
@@ -279,10 +332,12 @@
       jbloc.innerHTML=`
         <div class="jauge">${demiJauge(niveau)}</div>
         <div class="jauge-qualif" style="color:${ind.couleur}">${ind.qualificatif}</div>
-        <div class="jauge-sous">Indice ATMO ${ind.valeur}/6</div>
         ${tendanceHtml}
         <div class="course" style="--cc:${vc.couleur}">
-          <div class="course-ico">${vc.ico}</div>
+          <div class="course-ico">
+            <img src="data:image/png;base64,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"/>
+            <div class="course-badge">${vc.ok?"✓":"!"}</div>
+          </div>
           <div><div class="course-txt">${vc.txt}</div>
           <div class="course-det">${vc.det}</div></div>
         </div>`;
