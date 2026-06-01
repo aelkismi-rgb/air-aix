@@ -5,65 +5,58 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Qualité de l'air - Rousset</title>
 <style>
-  :root {
-    --fond1:#0a2540; --fond2:#0e3155;
-    --txt:#fff; --txt-doux:#aac4dd;
-    --carte:rgba(255,255,255,0.06); --bord:rgba(255,255,255,0.13);
+  :root{
+    --fond1:#0a2540;--fond2:#0e3155;
+    --txt:#fff;--txt-doux:#aac4dd;
+    --carte:rgba(255,255,255,0.06);--bord:rgba(255,255,255,0.13);
   }
   *{box-sizing:border-box;margin:0;padding:0;}
   html,body{width:100%;height:100%;font-family:"Segoe UI",Tahoma,sans-serif;
     background:radial-gradient(circle at 25% 15%,var(--fond2),var(--fond1));
     color:var(--txt);overflow:hidden;}
-  .page{width:100%;height:100%;display:flex;flex-direction:column;padding:3.5vh 3.5vw;}
-  header{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:2vh;}
-  h1{font-size:2.8vw;font-weight:700;letter-spacing:-1px;}
+  .page{width:100%;height:100%;display:flex;flex-direction:column;padding:3vh 3vw;}
+  header{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:1.8vh;}
+  h1{font-size:2.6vw;font-weight:700;letter-spacing:-1px;}
   h1 span{color:#4db8ff;}
-  .lieu{font-size:1.3vw;color:var(--txt-doux);margin-top:0.3vh;}
+  .lieu{font-size:1.2vw;color:var(--txt-doux);margin-top:0.3vh;}
   .maj{font-size:1vw;color:var(--txt-doux);text-align:right;}
 
-  .corps{flex:1;display:flex;gap:3vw;align-items:center;}
+  .corps{flex:1;display:flex;gap:2.5vw;align-items:stretch;min-height:0;}
 
-  /* Jauge ronde */
-  .jauge-bloc{flex:0 0 34%;display:flex;flex-direction:column;align-items:center;}
-  .jauge{position:relative;width:24vw;height:24vw;}
-  .jauge svg{width:100%;height:100%;transform:rotate(-90deg);}
-  .jauge-centre{position:absolute;inset:0;display:flex;flex-direction:column;
-    align-items:center;justify-content:center;text-align:center;}
-  .jauge-qualif{font-size:2.2vw;font-weight:800;line-height:1.1;}
-  .jauge-sous{font-size:1.1vw;color:var(--txt-doux);margin-top:0.8vh;}
-  .majoritaire{margin-top:2.2vh;font-size:1.15vw;color:var(--txt-doux);text-align:center;}
-  .majoritaire b{color:#fff;}
+  /* Widget officiel AtmoSud a gauche */
+  .widget-bloc{flex:0 0 38%;display:flex;flex-direction:column;}
+  .cadre-widget{flex:1;background:#fff;border-radius:20px;overflow:hidden;
+    box-shadow:0 12px 40px rgba(0,0,0,0.3);}
+  .cadre-widget iframe{width:100%;height:100%;border:0;display:block;}
 
-  /* Colonne droite */
-  .droite{flex:1;display:flex;flex-direction:column;gap:2vh;}
-  .sous-titre{font-size:1.3vw;font-weight:600;color:var(--txt-doux);margin-bottom:0.5vh;}
-  .polluants{display:grid;grid-template-columns:repeat(5,1fr);gap:1vw;}
-  .pol{background:var(--carte);border:1px solid var(--bord);border-radius:14px;
-    padding:1.6vh 0.5vw;text-align:center;border-top:6px solid var(--c,#888);}
-  .pol-nom{font-size:1.05vw;font-weight:700;}
-  .pol-qual{font-size:0.85vw;color:var(--txt-doux);margin-top:0.6vh;}
-  .pol-oms{font-size:0.7vw;color:#7d97b3;margin-top:0.8vh;line-height:1.3;}
+  /* Colonne droite : ajouts API */
+  .droite{flex:1;display:flex;flex-direction:column;gap:1.8vh;min-height:0;}
+  .sous-titre{font-size:1.2vw;font-weight:600;color:var(--txt-doux);margin-bottom:0.5vh;}
+  .polluants{display:grid;grid-template-columns:repeat(5,1fr);gap:0.9vw;}
+  .pol{background:var(--carte);border:1px solid var(--bord);border-radius:12px;
+    padding:1.4vh 0.4vw;text-align:center;border-top:5px solid var(--c,#888);}
+  .pol-nom{font-size:1vw;font-weight:700;}
+  .pol-qual{font-size:0.8vw;color:var(--txt-doux);margin-top:0.5vh;}
+  .pol-oms{font-size:0.65vw;color:#7d97b3;margin-top:0.7vh;line-height:1.3;}
 
-  /* Prévisions */
-  .prev{display:flex;gap:1.5vw;margin-top:0.5vh;}
+  .prev{display:flex;gap:1.2vw;}
   .prev-jour{flex:1;background:var(--carte);border:1px solid var(--bord);
-    border-radius:12px;padding:1.2vh 1vw;display:flex;align-items:center;gap:1vw;}
-  .prev-pastille{width:1.6vw;height:1.6vw;border-radius:50%;flex:0 0 auto;}
-  .prev-info{font-size:0.95vw;}
-  .prev-info .d{color:var(--txt-doux);font-size:0.8vw;}
+    border-radius:11px;padding:1.1vh 0.9vw;display:flex;align-items:center;gap:0.8vw;}
+  .prev-pastille{width:1.5vw;height:1.5vw;border-radius:50%;flex:0 0 auto;}
+  .prev-info{font-size:0.9vw;}
+  .prev-info .d{color:var(--txt-doux);font-size:0.75vw;}
 
-  /* Reco */
-  .reco{background:var(--carte);border:1px solid var(--bord);border-radius:14px;
-    padding:1.6vh 1.4vw;font-size:0.95vw;line-height:1.5;color:#dceaf7;}
+  .reco{background:var(--carte);border:1px solid var(--bord);border-radius:12px;
+    padding:1.4vh 1.2vw;font-size:0.92vw;line-height:1.5;color:#dceaf7;}
   .reco b{color:#4db8ff;}
 
-  /* Légende */
-  footer{margin-top:2vh;display:flex;justify-content:space-between;align-items:center;}
+  footer{margin-top:1.6vh;display:flex;justify-content:space-between;align-items:center;}
   .legende{display:flex;gap:0.5vw;flex-wrap:wrap;}
-  .leg{display:flex;align-items:center;gap:0.4vw;font-size:0.8vw;color:var(--txt-doux);}
-  .leg-c{width:1vw;height:1vw;border-radius:3px;}
-  .source{font-size:0.8vw;color:var(--txt-doux);}
-  .erreur{font-size:1.4vw;color:#ff9b9b;text-align:center;width:100%;padding:6vh;}
+  .leg{display:flex;align-items:center;gap:0.4vw;font-size:0.78vw;color:var(--txt-doux);}
+  .leg-c{width:0.9vw;height:0.9vw;border-radius:3px;}
+  .source{font-size:0.78vw;color:var(--txt-doux);}
+  .chargement{font-size:1.1vw;color:var(--txt-doux);padding:3vh;}
+  .erreur{font-size:1.1vw;color:#ff9b9b;padding:3vh;}
 </style>
 </head>
 <body>
@@ -75,9 +68,21 @@
       </div>
       <div class="maj" id="maj">Chargement…</div>
     </header>
-    <div class="corps" id="corps">
-      <div class="erreur">Chargement des données AtmoSud…</div>
+
+    <div class="corps">
+      <!-- Widget officiel AtmoSud -->
+      <div class="widget-bloc">
+        <div class="cadre-widget">
+          <iframe src="https://www.atmosud.org/widget-mon-air/widget/commune/13087"></iframe>
+        </div>
+      </div>
+
+      <!-- Ajouts API -->
+      <div class="droite" id="droite">
+        <div class="chargement">Chargement des détails AtmoSud…</div>
+      </div>
     </div>
+
     <footer>
       <div class="legende" id="legende"></div>
       <div class="source">Source : AtmoSud · maj auto 30 min</div>
@@ -85,135 +90,74 @@
   </div>
 
 <script>
-  const TOKEN = "bcfe08c69ccc3507bb36f3ce76dafcef";
-  const INSEE = "13087";
+  const TOKEN="bcfe08c69ccc3507bb36f3ce76dafcef";
+  const INSEE="13087";
 
-  // Echelle officielle indice ATMO (1 a 6)
-  const ECHELLE = [
-    {n:"Bon",            c:"#50F0E6"},
-    {n:"Moyen",          c:"#50CCAA"},
-    {n:"Dégradé",        c:"#F0E641"},
-    {n:"Mauvais",        c:"#FF5050"},
-    {n:"Très mauvais",   c:"#960032"},
-    {n:"Extrêmement mauvais", c:"#7D2181"}
+  const ECHELLE=[
+    {n:"Bon",c:"#50F0E6"},{n:"Moyen",c:"#50CCAA"},{n:"Dégradé",c:"#F0E641"},
+    {n:"Mauvais",c:"#FF5050"},{n:"Très mauvais",c:"#960032"},{n:"Extrêmement mauvais",c:"#7D2181"}
   ];
-
-  // Polluants affiches + seuils OMS (recommandations OMS 2021, moyenne 24h ou annuelle)
-  const POLS = [
-    {k:"pm2.5", nom:"PM2.5", oms:"OMS 24h : 15 µg/m³"},
-    {k:"pm10",  nom:"PM10",  oms:"OMS 24h : 45 µg/m³"},
-    {k:"o3",    nom:"O₃",    oms:"OMS 8h : 100 µg/m³"},
-    {k:"no2",   nom:"NO₂",   oms:"OMS 24h : 25 µg/m³"},
-    {k:"so2",   nom:"SO₂",   oms:"OMS 24h : 40 µg/m³"}
+  const POLS=[
+    {k:"pm2.5",nom:"PM2.5",oms:"OMS 24h : 15 µg/m³"},
+    {k:"pm10",nom:"PM10",oms:"OMS 24h : 45 µg/m³"},
+    {k:"o3",nom:"O₃",oms:"OMS 8h : 100 µg/m³"},
+    {k:"no2",nom:"NO₂",oms:"OMS 24h : 25 µg/m³"},
+    {k:"so2",nom:"SO₂",oms:"OMS 24h : 40 µg/m³"}
   ];
-
-  // Recommandations selon le niveau (valeur indice 1-6)
-  const RECO = {
+  const RECO={
     1:"Qualité de l'air <b>bonne</b> : profitez de vos activités de plein air sans restriction.",
     2:"Qualité de l'air <b>moyenne</b> : aucune restriction, activités de plein air possibles.",
     3:"Qualité de l'air <b>dégradée</b> : les personnes sensibles peuvent ressentir une gêne. Privilégiez les parcs et zones peu circulantes pour le sport ; aérez aux heures les moins polluées.",
     4:"Qualité de l'air <b>mauvaise</b> : personnes sensibles, limitez les activités physiques intenses en extérieur. En cas de gêne respiratoire, consultez un professionnel de santé.",
-    5:"Qualité de l'air <b>très mauvaise</b> : évitez les efforts physiques intenses dehors. Reportez les activités sportives extérieures, surtout pour les personnes sensibles.",
-    6:"Qualité de l'air <b>extrêmement mauvaise</b> : limitez au maximum les sorties et les efforts en extérieur. Suivez les consignes des autorités sanitaires."
+    5:"Qualité de l'air <b>très mauvaise</b> : évitez les efforts physiques intenses dehors. Reportez le sport en extérieur, surtout pour les personnes sensibles.",
+    6:"Qualité de l'air <b>extrêmement mauvaise</b> : limitez au maximum les sorties et efforts en extérieur. Suivez les consignes des autorités sanitaires."
   };
 
-  function jour(dateStr){
-    const d=new Date(dateStr+"T12:00:00");
-    return d.toLocaleDateString("fr-FR",{weekday:"short",day:"2-digit",month:"short"});
-  }
+  function jour(s){const d=new Date(s+"T12:00:00");
+    return d.toLocaleDateString("fr-FR",{weekday:"short",day:"2-digit",month:"short"});}
+  function troisDates(){const o=[];for(let i=0;i<3;i++){const d=new Date();
+    d.setDate(d.getDate()+i);o.push(d.toISOString().slice(0,10));}return o.join(",");}
 
   async function charger(){
-    const corps=document.getElementById("corps");
+    const droite=document.getElementById("droite");
     const url="https://api.atmosud.org/iqa2021/commune/indices/journalier"
       +"?insee="+INSEE+"&indice=all&format_indice=valeur,qualificatif,couleur"
-      +"&dates_echeances="+troisDates()
-      +"&token="+TOKEN;
+      +"&dates_echeances="+troisDates()+"&token="+TOKEN;
     try{
-      const r=await fetch(url);
-      const data=await r.json();
-      const bloc=data[INSEE];
-      if(!bloc||!bloc.valeurs) throw new Error("vide");
-
+      const r=await fetch(url);const data=await r.json();
+      const bloc=data[INSEE];if(!bloc||!bloc.valeurs)throw new Error("vide");
       const dates=Object.keys(bloc.valeurs).sort();
-      const auj=bloc.valeurs[dates[0]];
-      const ind=auj.indice;
-      const niveau=ind.valeur; // 1 a 6
-      const pct=niveau/6;
-      const circ=2*Math.PI*42;
+      const auj=bloc.valeurs[dates[0]];const niveau=auj.indice.valeur;
 
-      // sous-indices polluants
       let polsHtml="";
-      POLS.forEach(p=>{
-        const v=auj[p.k];
-        if(v){
-          polsHtml+=`<div class="pol" style="--c:${v.couleur}">
-            <div class="pol-nom">${p.nom}</div>
-            <div class="pol-qual">${v.qualificatif}</div>
-            <div class="pol-oms">${p.oms}</div></div>`;
-        }
-      });
+      POLS.forEach(p=>{const v=auj[p.k];if(v){
+        polsHtml+=`<div class="pol" style="--c:${v.couleur}">
+          <div class="pol-nom">${p.nom}</div>
+          <div class="pol-qual">${v.qualificatif}</div>
+          <div class="pol-oms">${p.oms}</div></div>`;}});
 
-      // previsions J+1 J+2
       let prevHtml="";
-      dates.slice(1,3).forEach(dt=>{
-        const pv=bloc.valeurs[dt].indice;
+      dates.slice(1,3).forEach(dt=>{const pv=bloc.valeurs[dt].indice;
         prevHtml+=`<div class="prev-jour">
           <div class="prev-pastille" style="background:${pv.couleur}"></div>
           <div class="prev-info"><div class="d">${jour(dt)}</div><div>${pv.qualificatif}</div></div>
-        </div>`;
-      });
+        </div>`;});
 
-      const majPoll = (auj.majoritaire&&auj.majoritaire.length)
-        ? auj.majoritaire.join(", ").toUpperCase() : "—";
+      droite.innerHTML=`
+        <div><div class="sous-titre">Détail par polluant</div>
+          <div class="polluants">${polsHtml}</div></div>
+        <div><div class="sous-titre">Prévisions</div>
+          <div class="prev">${prevHtml}</div></div>
+        <div class="reco">${RECO[niveau]||""}</div>`;
 
-      corps.innerHTML=`
-        <div class="jauge-bloc">
-          <div class="jauge">
-            <svg viewBox="0 0 100 100">
-              <circle cx="50" cy="50" r="42" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="9"/>
-              <circle cx="50" cy="50" r="42" fill="none" stroke="${ind.couleur}" stroke-width="9"
-                stroke-linecap="round" stroke-dasharray="${circ}"
-                stroke-dashoffset="${circ*(1-pct)}"/>
-            </svg>
-            <div class="jauge-centre">
-              <div class="jauge-qualif" style="color:${ind.couleur}">${ind.qualificatif}</div>
-              <div class="jauge-sous">Indice ATMO ${ind.valeur}/6</div>
-            </div>
-          </div>
-          <div class="majoritaire">Polluant responsable : <b>${majPoll}</b></div>
-        </div>
-        <div class="droite">
-          <div>
-            <div class="sous-titre">Détail par polluant</div>
-            <div class="polluants">${polsHtml}</div>
-          </div>
-          <div>
-            <div class="sous-titre">Prévisions</div>
-            <div class="prev">${prevHtml}</div>
-          </div>
-          <div class="reco">${RECO[niveau]||""}</div>
-        </div>`;
-
-      // legende
       document.getElementById("legende").innerHTML=
         ECHELLE.map(e=>`<div class="leg"><div class="leg-c" style="background:${e.c}"></div>${e.n}</div>`).join("");
-
       document.getElementById("maj").textContent=
         "Diffusé le "+new Date(auj.date_diffusion).toLocaleDateString("fr-FR");
     }catch(e){
-      corps.innerHTML='<div class="erreur">Impossible de charger les données AtmoSud. Nouvel essai dans 30 min.</div>';
+      droite.innerHTML='<div class="erreur">Détails indisponibles. Nouvel essai dans 30 min.</div>';
     }
   }
-
-  function troisDates(){
-    const out=[];
-    for(let i=0;i<3;i++){
-      const d=new Date();d.setDate(d.getDate()+i);
-      out.push(d.toISOString().slice(0,10));
-    }
-    return out.join(",");
-  }
-
   charger();
   setInterval(charger,30*60*1000);
 </script>
