@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Qualité de l'air - AtmoSud</title>
+<style>
+  html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    background: #ffffff;
+    overflow: hidden;
+  }
+  .wrapper {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  /*
+    Le widget AtmoSud fait environ 600 x 470 px.
+    On l'agrandit avec "scale" pour remplir l'ecran.
+    Ajustez le chiffre 2.2 :
+      plus grand  = widget plus gros
+      plus petit  = widget plus petit
+  */
+  .scaler {
+    width: 600px;
+    height: 470px;
+    transform: scale(2.2);
+    transform-origin: center center;
+  }
+  .scaler iframe {
+    width: 100%;
+    height: 100%;
+    border: 0;
+  }
+</style>
+</head>
+<body>
+  <div class="wrapper">
+    <div class="scaler">
+      <iframe src="https://www.atmosud.org/widget-mon-air/widget/commune/13087"></iframe>
+    </div>
+  </div>
+</body>
+</html>
