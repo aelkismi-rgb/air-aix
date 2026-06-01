@@ -21,42 +21,24 @@
   .lieu{font-size:1.2vw;color:var(--txt-doux);margin-top:0.3vh;}
   .maj{font-size:1vw;color:var(--txt-doux);text-align:right;}
 
-  .corps{flex:1;display:flex;gap:2.5vw;align-items:stretch;min-height:0;}
+  .corps{flex:1;display:flex;gap:2.5vw;align-items:center;min-height:0;}
 
-  /* ===== Widget officiel : on ne montre QUE le compteur (le rond) ===== */
-  .widget-bloc{flex:0 0 38%;display:flex;flex-direction:column;}
-  .cadre-widget{
-    flex:1;background:#fff;border-radius:20px;overflow:hidden;
-    box-shadow:0 12px 40px rgba(0,0,0,0.3);
-    display:flex;align-items:center;justify-content:center;
+  /* ===== Jauge recreee (donnees officielles API) ===== */
+  .jauge-bloc{flex:0 0 36%;display:flex;flex-direction:column;align-items:center;justify-content:center;}
+  .jauge{position:relative;width:22vw;height:22vw;}
+  .jauge svg{width:100%;height:100%;transform:rotate(-90deg);}
+  .jauge-centre{position:absolute;inset:0;display:flex;flex-direction:column;
+    align-items:center;justify-content:center;text-align:center;padding:0 2vw;}
+  .jauge-qualif{font-size:2.4vw;font-weight:800;line-height:1.05;}
+  .jauge-sous{font-size:1vw;color:var(--txt-doux);margin-top:1vh;}
+  .etat-bandeau{
+    margin-top:2.5vh;padding:1vh 2vw;border-radius:999px;
+    font-size:1.3vw;font-weight:700;color:#06121f;text-align:center;
   }
-  /*
-    FENETRE DECOUPE : on cache tout sauf le haut du widget (la jauge).
-    --visible  = hauteur de la zone du widget qu'on laisse voir (le compteur).
-                 Si vous voyez trop (les conseils apparaissent) -> DIMINUEZ (ex 360).
-                 Si la jauge est coupee en bas -> AUGMENTEZ (ex 460).
-    --decalage = de combien on remonte le widget pour cadrer la jauge.
-                 Mettez 0 pour commencer. Si un bandeau/titre inutile depasse
-                 en haut, augmentez un peu (ex 40, 60).
-  */
-  .fenetre{
-    --visible:400px;
-    --decalage:0px;
-    width:100%;
-    height:var(--visible);
-    overflow:hidden;
-    position:relative;
-  }
-  .fenetre iframe{
-    width:100%;
-    height:1100px;            /* hauteur totale reelle du widget */
-    border:0;
-    position:absolute;
-    top:calc(-1 * var(--decalage));
-    left:0;
-  }
+  .tendance{margin-top:1.8vh;font-size:1.05vw;color:var(--txt-doux);text-align:center;}
+  .tendance b{color:#fff;}
 
-  /* Colonne droite : ajouts API */
+  /* Colonne droite */
   .droite{flex:1;display:flex;flex-direction:column;gap:1.8vh;min-height:0;}
   .sous-titre{font-size:1.2vw;font-weight:600;color:var(--txt-doux);margin-bottom:0.5vh;}
   .polluants{display:grid;grid-template-columns:repeat(5,1fr);gap:0.9vw;}
@@ -74,8 +56,7 @@
   .prev-info .d{color:var(--txt-doux);font-size:0.75vw;}
 
   .reco{background:var(--carte);border:1px solid var(--bord);border-radius:12px;
-    padding:1.4vh 1.2vw;font-size:0.85vw;line-height:1.45;color:#dceaf7;
-    overflow-y:auto;}
+    padding:1.4vh 1.2vw;font-size:0.85vw;line-height:1.45;color:#dceaf7;overflow-y:auto;}
   .reco b{color:#4db8ff;}
 
   footer{margin-top:1.6vh;display:flex;justify-content:space-between;align-items:center;}
@@ -98,13 +79,9 @@
     </header>
 
     <div class="corps">
-      <!-- Widget officiel : seulement le compteur -->
-      <div class="widget-bloc">
-        <div class="cadre-widget">
-          <div class="fenetre">
-            <iframe src="https://www.atmosud.org/widget-mon-air/widget/commune/13087"></iframe>
-          </div>
-        </div>
+      <!-- Jauge recreee -->
+      <div class="jauge-bloc" id="jauge-bloc">
+        <div class="chargement">Chargement…</div>
       </div>
 
       <!-- Ajouts API -->
@@ -138,9 +115,9 @@
     1:"Qualité de l'air <b>bonne</b> : profitez de vos activités de plein air sans restriction.",
     2:"Qualité de l'air <b>moyenne</b> : aucune restriction, activités de plein air possibles.",
     3:"Qualité de l'air <b>dégradée</b> : les personnes sensibles peuvent ressentir une gêne. Privilégiez les parcs et zones peu circulantes pour le sport ; aérez aux heures les moins polluées.",
-    4:"Qualité de l'air <b>mauvaise</b> : personnes sensibles, limitez les activités physiques intenses en extérieur. En cas de gêne respiratoire, consultez un professionnel de santé.",
-    5:"Qualité de l'air <b>très mauvaise</b> : évitez les efforts physiques intenses dehors. Reportez le sport en extérieur, surtout pour les personnes sensibles.",
-    6:"Qualité de l'air <b>extrêmement mauvaise</b> : limitez au maximum les sorties et efforts en extérieur. Suivez les consignes des autorités sanitaires."
+    4:"Qualité de l'air <b>mauvaise</b> : personnes sensibles, limitez les activités physiques intenses en extérieur.",
+    5:"Qualité de l'air <b>très mauvaise</b> : évitez les efforts physiques intenses dehors.",
+    6:"Qualité de l'air <b>extrêmement mauvaise</b> : limitez au maximum les sorties et efforts en extérieur."
   };
 
   function jour(s){const d=new Date(s+"T12:00:00");
@@ -149,6 +126,7 @@
     d.setDate(d.getDate()+i);o.push(d.toISOString().slice(0,10));}return o.join(",");}
 
   async function charger(){
+    const jbloc=document.getElementById("jauge-bloc");
     const droite=document.getElementById("droite");
     const url="https://api.atmosud.org/iqa2021/commune/indices/journalier"
       +"?insee="+INSEE+"&indice=all&format_indice=valeur,qualificatif,couleur"
@@ -157,8 +135,34 @@
       const r=await fetch(url);const data=await r.json();
       const bloc=data[INSEE];if(!bloc||!bloc.valeurs)throw new Error("vide");
       const dates=Object.keys(bloc.valeurs).sort();
-      const auj=bloc.valeurs[dates[0]];const niveau=auj.indice.valeur;
+      const auj=bloc.valeurs[dates[0]];
+      const ind=auj.indice;const niveau=ind.valeur;
+      const circ=2*Math.PI*42;const pct=niveau/6;
 
+      // tendance pour demain
+      let tendanceHtml="";
+      if(dates[1]&&bloc.valeurs[dates[1]]){
+        const dem=bloc.valeurs[dates[1]].indice;
+        tendanceHtml=`<div class="tendance">Tendance demain : <b>${dem.qualificatif}</b></div>`;
+      }
+
+      // ===== JAUGE =====
+      jbloc.innerHTML=`
+        <div class="jauge">
+          <svg viewBox="0 0 100 100">
+            <circle cx="50" cy="50" r="42" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="10"/>
+            <circle cx="50" cy="50" r="42" fill="none" stroke="${ind.couleur}" stroke-width="10"
+              stroke-linecap="round" stroke-dasharray="${circ}" stroke-dashoffset="${circ*(1-pct)}"/>
+          </svg>
+          <div class="jauge-centre">
+            <div class="jauge-qualif" style="color:${ind.couleur}">${ind.qualificatif}</div>
+            <div class="jauge-sous">Indice ATMO ${ind.valeur}/6</div>
+          </div>
+        </div>
+        <div class="etat-bandeau" style="background:${ind.couleur}">${ind.qualificatif}</div>
+        ${tendanceHtml}`;
+
+      // ===== POLLUANTS =====
       let polsHtml="";
       POLS.forEach(p=>{const v=auj[p.k];if(v){
         polsHtml+=`<div class="pol" style="--c:${v.couleur}">
@@ -166,6 +170,7 @@
           <div class="pol-qual">${v.qualificatif}</div>
           <div class="pol-oms">${p.oms}</div></div>`;}});
 
+      // ===== PREVISIONS =====
       let prevHtml="";
       dates.slice(1,3).forEach(dt=>{const pv=bloc.valeurs[dt].indice;
         prevHtml+=`<div class="prev-jour">
@@ -173,15 +178,14 @@
           <div class="prev-info"><div class="d">${jour(dt)}</div><div>${pv.qualificatif}</div></div>
         </div>`;});
 
-      // Recuperer le vrai commentaire officiel AtmoSud du jour
-      let commentaire = RECO[niveau] || "";   // repli si l'API commentaire echoue
+      // ===== COMMENTAIRE OFFICIEL =====
+      let commentaire=RECO[niveau]||"";
       try{
-        const today = troisDates().split(",")[0];
-        const rc = await fetch(
-          "https://api.atmosud.org/prevision/commentaires/?dates_echeance="
-          + today + "&token=" + TOKEN);
-        const dc = await rc.json();
-        if(dc && dc[today]) commentaire = dc[today];
+        const today=troisDates().split(",")[0];
+        const rc=await fetch("https://api.atmosud.org/prevision/commentaires/?dates_echeance="
+          +today+"&token="+TOKEN);
+        const dc=await rc.json();
+        if(dc&&dc[today]) commentaire=dc[today];
       }catch(e){}
 
       droite.innerHTML=`
@@ -197,6 +201,7 @@
       document.getElementById("maj").textContent=
         "Diffusé le "+new Date(auj.date_diffusion).toLocaleDateString("fr-FR");
     }catch(e){
+      jbloc.innerHTML='<div class="erreur">Indisponible.</div>';
       droite.innerHTML='<div class="erreur">Détails indisponibles. Nouvel essai dans 30 min.</div>';
     }
   }
