@@ -25,7 +25,6 @@
 
   .corps{flex:1;display:flex;gap:2.3vw;align-items:center;min-height:0;}
 
-  /* Demi-jauge a aiguille */
   .jauge-bloc{flex:0 0 30%;display:flex;flex-direction:column;align-items:center;justify-content:center;}
   .jauge{position:relative;width:21vw;}
   .jauge svg{width:100%;height:auto;display:block;}
@@ -34,7 +33,6 @@
   .tendance{margin-top:1.2vh;font-size:0.92vw;color:var(--txt-doux);text-align:center;}
   .tendance b{color:#fff;}
 
-  /* Verdict course : code couleur + icone simple */
   .course{margin-top:1.6vh;width:92%;border-radius:12px;padding:1.2vh 1vw;
     display:flex;align-items:center;gap:0.9vw;
     border-left:6px solid var(--cc,#888);background:rgba(255,255,255,0.05);}
@@ -44,9 +42,14 @@
   .course-txt{font-size:1vw;font-weight:700;color:var(--cc,#fff);}
   .course-det{font-size:0.72vw;color:var(--txt-doux);margin-top:0.2vh;line-height:1.3;}
 
-  /* Colonne droite */
-  .droite{flex:1;display:flex;flex-direction:column;gap:1.1vh;min-height:0;}
+  .droite{flex:1;display:flex;flex-direction:column;gap:1vh;min-height:0;}
   .sous-titre{font-size:1vw;font-weight:600;color:var(--txt-doux);margin-bottom:0.3vh;}
+
+  /* Bulletin en haut */
+  .bulletin{background:var(--carte);border:1px solid var(--bord);border-radius:10px;
+    padding:0.9vh 1vw;font-size:0.72vw;line-height:1.4;color:#cfe0ee;
+    max-height:9vh;overflow-y:auto;}
+
   .polluants{display:grid;grid-template-columns:repeat(5,1fr);gap:0.7vw;}
   .pol{background:var(--carte);border:1px solid var(--bord);border-radius:10px;
     padding:0.8vh 0.3vw;text-align:center;border-top:4px solid var(--c,#888);}
@@ -61,17 +64,21 @@
   .prev-info{font-size:0.78vw;}
   .prev-info .d{color:var(--txt-doux);font-size:0.66vw;}
 
-  /* Conseils EPURES facon AtmoSud : icone + texte, pas de cadre */
-  .conseils{display:flex;flex-direction:column;gap:0.7vh;}
+  /* Conseils : icone fine blanche + badge transparent par dessus */
+  .conseils{display:flex;flex-direction:column;gap:0.6vh;}
   .conseil{display:flex;gap:0.9vw;align-items:flex-start;}
-  .conseil-ico{font-size:1.3vw;line-height:1.2;flex:0 0 auto;width:1.8vw;text-align:center;}
+  .conseil-ico{position:relative;flex:0 0 auto;width:2.2vw;height:2.2vw;}
+  .conseil-ico svg{width:100%;height:100%;stroke:#fff;fill:none;stroke-width:1.6;
+    stroke-linecap:round;stroke-linejoin:round;}
+  /* badge transparent superpose */
+  .conseil-badge{position:absolute;right:-0.3vw;bottom:-0.3vw;
+    width:1.3vw;height:1.3vw;border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+    font-size:0.85vw;font-weight:900;}
+  .badge-ok{background:rgba(80,240,230,0.25);color:#9af7ef;border:1px solid rgba(80,240,230,0.5);}
+  .badge-warn{background:rgba(240,230,65,0.25);color:#f5ec8a;border:1px solid rgba(240,230,65,0.5);}
   .conseil-txt h4{font-size:0.82vw;color:var(--bleu);font-weight:700;margin-bottom:0.1vh;}
   .conseil-txt p{font-size:0.7vw;line-height:1.3;color:#cfe0ee;}
-
-  /* Bulletin */
-  .bulletin{background:var(--carte);border:1px solid var(--bord);border-radius:10px;
-    padding:1vh 1vw;font-size:0.72vw;line-height:1.4;color:#cfe0ee;
-    max-height:11vh;overflow-y:auto;}
 
   footer{margin-top:1.1vh;display:flex;justify-content:space-between;align-items:center;}
   .legende{display:flex;gap:0.5vw;flex-wrap:wrap;}
@@ -127,12 +134,20 @@
     {k:"so2",nom:"SO₂",oms:"OMS 24h : 40 µg/m³"}
   ];
 
+  // Icones fines (SVG trait blanc)
+  const ICONES={
+    activite:'<svg viewBox="0 0 24 24"><circle cx="13" cy="4" r="2"/><path d="M13 6l-2 5 3 2v5"/><path d="M11 11l-4 1-2 4"/><path d="M14 13l4 1"/></svg>',
+    sensibles:'<svg viewBox="0 0 24 24"><path d="M12 21c-4-3-7-6-7-10a4 4 0 0 1 7-2 4 4 0 0 1 7 2c0 4-3 7-7 10z"/></svg>',
+    deplacements:'<svg viewBox="0 0 24 24"><circle cx="6" cy="17" r="3"/><circle cx="18" cy="17" r="3"/><path d="M6 17l4-7h5l3 7"/><path d="M10 10l2-3h3"/></svg>',
+    airint:'<svg viewBox="0 0 24 24"><path d="M3 8h12a3 3 0 1 0-3-3"/><path d="M3 14h16a3 3 0 1 1-3 3"/></svg>',
+    conseil:'<svg viewBox="0 0 24 24"><path d="M9 18h6"/><path d="M10 21h4"/><path d="M12 3a6 6 0 0 0-4 10c1 1 1 2 1 3h6c0-1 0-2 1-3a6 6 0 0 0-4-10z"/></svg>'
+  };
+
   function choixDuJour(liste, decalage){
     const j=Math.floor(Date.now()/86400000)+(decalage||0);
     return liste[j % liste.length];
   }
 
-  // Verdict course : coche verte si OK, point d'exclamation sinon
   function verdictCourse(niveau, temp, pluie, vent){
     let probleme=[]; let gravite=0;
     if(niveau>=4){gravite=2;probleme.push("air mauvais");}
@@ -142,49 +157,40 @@
     else if(temp<=2){gravite=Math.max(gravite,1);probleme.push("froid ("+Math.round(temp)+"°C)");}
     if(pluie>=3){gravite=Math.max(gravite,1);probleme.push("pluie");}
     if(vent>=40){gravite=Math.max(gravite,1);probleme.push("vent fort");}
-
-    if(gravite===0){
-      return {ico:"✓", txt:"Idéal pour courir",
-        det:"Air de bonne qualité, météo favorable ("+Math.round(temp)+"°C).",
-        couleur:"#50F0E6"};
-    } else if(gravite===1){
-      return {ico:"!", txt:"Course possible avec prudence",
-        det:"À surveiller : "+probleme.join(", ")+". Adaptez l'intensité et l'horaire.",
-        couleur:"#F0E641"};
-    } else {
-      return {ico:"!", txt:"Course déconseillée",
-        det:"Conditions défavorables : "+probleme.join(", ")+". Préférez l'intérieur.",
-        couleur:"#FF5050"};
-    }
+    if(gravite===0) return {ico:"✓",txt:"Idéal pour courir",det:"Air de bonne qualité, météo favorable ("+Math.round(temp)+"°C).",couleur:"#50F0E6"};
+    if(gravite===1) return {ico:"!",txt:"Course possible avec prudence",det:"À surveiller : "+probleme.join(", ")+". Adaptez l'intensité et l'horaire.",couleur:"#F0E641"};
+    return {ico:"!",txt:"Course déconseillée",det:"Conditions défavorables : "+probleme.join(", ")+". Préférez l'intérieur.",couleur:"#FF5050"};
   }
 
+  // chaque conseil renvoie aussi "ok" (true=check transparent, false=exclamation transparent)
   function conseils(niveau, temp, pluie, vent, majoritaire){
     const mois=new Date().getMonth()+1;
     const ete=(mois>=5&&mois<=9), hiver=(mois<=3||mois>=11);
     const dom=(majoritaire&&majoritaire[0])?majoritaire[0].toLowerCase():"";
     const ozone=dom.includes("o3"), particules=dom.includes("pm");
+    const airOk = niveau<=2;
 
-    let activite;
-    if(niveau>=4) activite=choixDuJour(["Reportez le sport intense en extérieur ; préférez une activité douce ou en intérieur.","Évitez les efforts prolongés dehors aujourd'hui."]);
-    else if(ozone&&ete) activite="Pic d'ozone l'après-midi : faites votre sport tôt le matin ou en soirée, à l'ombre.";
-    else if(niveau===3) activite="Privilégiez les parcs, les zones piétonnes et les rues peu circulantes pour vos activités de plein air.";
-    else activite=choixDuJour(["Conditions favorables : profitez des parcs et espaces verts pour vos activités de plein air.","Bon moment pour bouger dehors : marche, course ou vélo dans les zones vertes."]);
+    let activite, actOk;
+    if(niveau>=4){activite=choixDuJour(["Reportez le sport intense en extérieur ; préférez une activité douce ou en intérieur.","Évitez les efforts prolongés dehors aujourd'hui."]);actOk=false;}
+    else if(ozone&&ete){activite="Pic d'ozone l'après-midi : faites votre sport tôt le matin ou en soirée, à l'ombre.";actOk=false;}
+    else if(niveau===3){activite="Privilégiez les parcs, les zones piétonnes et les rues peu circulantes pour vos activités de plein air.";actOk=false;}
+    else {activite=choixDuJour(["Conditions favorables : profitez des parcs et espaces verts pour vos activités de plein air.","Bon moment pour bouger dehors : marche, course ou vélo dans les zones vertes."]);actOk=true;}
 
-    let sensibles;
-    if(niveau>=4) sensibles="Personnes sensibles : limitez les sorties et consultez un professionnel en cas de gêne.";
-    else if(particules&&hiver) sensibles="Particules fines élevées : évitez les abords des routes et le chauffage au bois.";
-    else if(niveau>=3) sensibles="N'aggravez pas les effets de la pollution en ajoutant des facteurs irritants (tabac, solvants, fumée de cheminée, pollens, etc.).";
-    else sensibles="Aucune précaution particulière, mais évitez les facteurs irritants (tabac, fumée, solvants).";
+    let sensibles, sensOk;
+    if(niveau>=4){sensibles="Personnes sensibles : limitez les sorties et consultez un professionnel en cas de gêne.";sensOk=false;}
+    else if(particules&&hiver){sensibles="Particules fines élevées : évitez les abords des routes et le chauffage au bois.";sensOk=false;}
+    else if(niveau>=3){sensibles="N'aggravez pas les effets de la pollution en ajoutant des facteurs irritants (tabac, solvants, fumée de cheminée, pollens, etc.).";sensOk=false;}
+    else {sensibles="Aucune précaution particulière, mais évitez les facteurs irritants (tabac, fumée, solvants).";sensOk=true;}
 
     let deplacements;
     if(niveau>=3) deplacements=choixDuJour(["Privilégiez les transports en commun, le covoiturage ou le vélo.","À vélo, placez-vous devant les voitures au feu rouge et gardez vos distances derrière un véhicule motorisé."]);
     else deplacements=choixDuJour(["Pour les trajets courts, préférez la marche ou le vélo.","À vélo, placez-vous devant les voitures au feu rouge et gardez vos distances derrière un véhicule motorisé."]);
 
-    let airint;
-    if(pluie>=3) airint="La pluie assainit l'air extérieur : c'est le moment d'aérer largement.";
-    else if(niveau>=4) airint="Aérez brièvement aux heures les moins polluées (tôt le matin).";
-    else if(hiver) airint="Aérez 10 min matin et soir : l'air intérieur est souvent plus pollué que l'extérieur.";
-    else airint="L'aération et la ventilation sont les moyens les plus efficaces d'améliorer votre air intérieur.";
+    let airint, airOk2;
+    if(pluie>=3){airint="La pluie assainit l'air extérieur : c'est le moment d'aérer largement.";airOk2=true;}
+    else if(niveau>=4){airint="Aérez brièvement aux heures les moins polluées (tôt le matin).";airOk2=false;}
+    else if(hiver){airint="Aérez 10 min matin et soir : l'air intérieur est souvent plus pollué que l'extérieur.";airOk2=true;}
+    else {airint="L'aération et la ventilation sont les moyens les plus efficaces d'améliorer votre air intérieur.";airOk2=true;}
 
     let pool=[
       "Utilisez des produits ménagers labellisés (Ecocert, NF Environnement, Ecolabel) et sans symbole de danger.",
@@ -199,11 +205,11 @@
     const conseilJour=choixDuJour(pool, niveau);
 
     return [
-      {i:"🏃",t:"Activité physique",p:activite},
-      {i:"🫁",t:"Personnes sensibles",p:sensibles},
-      {i:"🚲",t:"Déplacements",p:deplacements},
-      {i:"🏠",t:"Air intérieur",p:airint},
-      {i:"💡",t:"Conseil du jour",p:conseilJour}
+      {ico:ICONES.activite,t:"Activité physique",p:activite,ok:actOk},
+      {ico:ICONES.sensibles,t:"Personnes sensibles",p:sensibles,ok:sensOk},
+      {ico:ICONES.deplacements,t:"Déplacements",p:deplacements,ok:true},
+      {ico:ICONES.airint,t:"Air intérieur",p:airint,ok:airOk2},
+      {ico:ICONES.conseil,t:"Conseil du jour",p:conseilJour,ok:true}
     ];
   }
 
@@ -236,13 +242,11 @@
       return {temp:d.current.temperature_2m,pluie:d.current.precipitation,vent:d.current.wind_speed_10m};
     }catch(e){return {temp:20,pluie:0,vent:0};}
   }
-
   async function getBulletin(){
     try{
       const today=troisDates().split(",")[0];
       const r=await fetch("https://api.atmosud.org/prevision/commentaires/?dates_echeance="+today+"&token="+TOKEN);
-      const d=await r.json();
-      if(d&&d[today]) return d[today];
+      const d=await r.json();if(d&&d[today]) return d[today];
     }catch(e){}
     return "";
   }
@@ -299,8 +303,11 @@
 
       let consHtml="";
       conseils(niveau,meteo.temp,meteo.pluie,meteo.vent,auj.majoritaire).forEach(c=>{
+        const badge = c.ok
+          ? '<div class="conseil-badge badge-ok">✓</div>'
+          : '<div class="conseil-badge badge-warn">!</div>';
         consHtml+=`<div class="conseil">
-          <div class="conseil-ico">${c.i}</div>
+          <div class="conseil-ico">${c.ico}${badge}</div>
           <div class="conseil-txt"><h4>${c.t}</h4><p>${c.p}</p></div></div>`;});
 
       const bulletinHtml = bulletin
@@ -308,13 +315,13 @@
         : "";
 
       droite.innerHTML=`
+        ${bulletinHtml}
         <div><div class="sous-titre">Détail par polluant</div>
           <div class="polluants">${polsHtml}</div></div>
         <div><div class="sous-titre">Prévisions</div>
           <div class="prev">${prevHtml}</div></div>
         <div><div class="sous-titre">Recommandations</div>
-          <div class="conseils">${consHtml}</div></div>
-        ${bulletinHtml}`;
+          <div class="conseils">${consHtml}</div></div>`;
 
       document.getElementById("legende").innerHTML=
         ECHELLE.map(e=>`<div class="leg"><div class="leg-c" style="background:${e.c}"></div>${e.n}</div>`).join("");
