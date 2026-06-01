@@ -3,52 +3,170 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Qualité de l'air - AtmoSud</title>
+<title>Qualité de l'air - Gardanne / Aix</title>
 <style>
+  :root {
+    --fond1: #0a2540;
+    --fond2: #103a5c;
+    --texte: #ffffff;
+    --texte-doux: #b8cce0;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
   html, body {
-    margin: 0;
-    padding: 0;
-    width: 100%;
-    height: 100%;
-    background: #ffffff;
+    width: 100%; height: 100%;
+    font-family: "Segoe UI", Tahoma, sans-serif;
+    background: radial-gradient(circle at 30% 20%, var(--fond2), var(--fond1));
+    color: var(--texte);
     overflow: hidden;
   }
-  /*
-    Le widget complet (indice + conseils) est plus haut que large.
-    On lui donne sa taille reelle, puis on l'agrandit avec "scale"
-    pour qu'il remplisse l'ecran sans rien couper.
-
-    REGLAGES A AJUSTER selon votre ecran :
-    - --largeur  : largeur reelle du widget (laisser 480 pour commencer)
-    - --hauteur  : hauteur reelle du widget COMPLET avec les conseils
-                   (1100 est une bonne base ; augmentez si le bas est coupe,
-                    diminuez s'il reste trop de vide en bas)
-    - scale      : le zoom. Plus grand = plus gros. Reglez en dernier.
-  */
-  .scaler {
-    --largeur: 480px;
-    --hauteur: 1100px;
-
-    width: var(--largeur);
-    height: var(--hauteur);
-
-    /* centre le widget a l'ecran */
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%) scale(0.85);
-    transform-origin: center center;
+  .page {
+    width: 100%; height: 100%;
+    display: flex; flex-direction: column;
+    padding: 4vh 4vw;
   }
-  .scaler iframe {
-    width: 100%;
-    height: 100%;
-    border: 0;
+  header {
+    display: flex; justify-content: space-between; align-items: baseline;
+    margin-bottom: 3vh;
   }
+  h1 { font-size: 3.4vw; font-weight: 700; letter-spacing: -1px; }
+  h1 span { color: #4db8ff; }
+  .lieu { font-size: 1.5vw; color: var(--texte-doux); }
+  .maj { font-size: 1.1vw; color: var(--texte-doux); text-align: right; }
+
+  .grille {
+    flex: 1;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(0, 1fr));
+    gap: 2.5vw;
+    align-content: center;
+  }
+  .carte {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 22px;
+    padding: 3vh 1.5vw;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    backdrop-filter: blur(6px);
+    border-top: 8px solid var(--c, #888);
+  }
+  .nom-polluant { font-size: 1.8vw; font-weight: 600; color: var(--texte-doux); margin-bottom: 1.5vh; text-align:center;}
+  .valeur { font-size: 6vw; font-weight: 800; line-height: 1; }
+  .unite { font-size: 1.4vw; color: var(--texte-doux); margin-top: 1vh; }
+  .niveau {
+    margin-top: 2vh; font-size: 1.3vw; font-weight: 700;
+    padding: 0.6vh 1.4vw; border-radius: 999px;
+    background: var(--c, #888); color: #06121f;
+  }
+  footer { margin-top: 3vh; font-size: 1vw; color: var(--texte-doux); text-align: center; }
+  .erreur { font-size: 1.6vw; color: #ff9b9b; text-align: center; padding: 4vh; }
 </style>
 </head>
 <body>
-  <div class="scaler">
-    <iframe src="https://www.atmosud.org/widget-mon-air/widget/commune/13087"></iframe>
+  <div class="page">
+    <header>
+      <div>
+        <h1>Qualité de l'<span>air</span></h1>
+        <div class="lieu">Station de Gardanne — secteur Aix / Rousset</div>
+      </div>
+      <div class="maj" id="maj">Chargement…</div>
+    </header>
+    <div class="grille" id="grille">
+      <div class="erreur">Chargement des données AtmoSud…</div>
+    </div>
+    <footer>Source : AtmoSud — données en temps réel · Mise à jour automatique toutes les 10 minutes</footer>
   </div>
+
+<script>
+  const TOKEN = "bcfe08c69ccc3507bb36f3ce76dafcef";
+  const STATION = "FR03030"; // Gardanne (la plus proche de Rousset)
+
+  // Polluants a afficher : code ISO + nom court pour l'API
+  const POLLUANTS = [
+    { id: "39", nom: "pm2.5", label: "PM2.5" },
+    { id: "24", nom: "pm10",  label: "PM10" },
+    { id: "03", nom: "no2",   label: "NO2" }
+  ];
+
+  // Seuils indicatifs (µg/m3) pour la couleur, bases sur l'indice ATMO
+  // [bon, moyen, degrade, mauvais] -> au-dela = tres mauvais
+  const SEUILS = {
+    "PM2.5": [10, 20, 25, 50],
+    "PM10":  [20, 40, 50, 100],
+    "NO2":   [40, 90, 120, 230]
+  };
+  const COULEURS = ["#50f0a0", "#b0f050", "#f0d050", "#f08050", "#f05050"];
+  const NIVEAUX  = ["Bon", "Moyen", "Dégradé", "Mauvais", "Très mauvais"];
+
+  function niveauPour(label, val) {
+    const s = SEUILS[label];
+    if (!s) return { c: "#50f0a0", txt: "—" };
+    let i = 0;
+    while (i < s.length && val > s[i]) i++;
+    return { c: COULEURS[i], txt: NIVEAUX[i] };
+  }
+
+  async function chargerUn(p) {
+    const url = "https://api.atmosud.org/observations/stations/mesures/derniere"
+      + "?station_id=" + STATION
+      + "&nom_polluant=" + p.nom
+      + "&temporalite=horaire&delais=2880&format=json&token=" + TOKEN;
+    try {
+      const r = await fetch(url);
+      const data = await r.json();
+      if (data.mesures && data.mesures.length > 0) {
+        return { ...p, mesure: data.mesures[0] };
+      }
+    } catch(e) {}
+    return { ...p, mesure: null };
+  }
+
+  async function charger() {
+    const grille = document.getElementById("grille");
+    try {
+      const resultats = await Promise.all(POLLUANTS.map(chargerUn));
+      let html = "";
+      let derniereDate = null;
+
+      resultats.forEach(res => {
+        if (res.mesure) {
+          const v = res.mesure.valeur;
+          const n = niveauPour(res.label, v);
+          if (!derniereDate || res.mesure.date_debut > derniereDate) {
+            derniereDate = res.mesure.date_debut;
+          }
+          html += `
+            <div class="carte" style="--c:${n.c}">
+              <div class="nom-polluant">${res.label}</div>
+              <div class="valeur" style="color:${n.c}">${Math.round(v)}</div>
+              <div class="unite">µg/m³</div>
+              <div class="niveau">${n.txt}</div>
+            </div>`;
+        } else {
+          html += `
+            <div class="carte">
+              <div class="nom-polluant">${res.label}</div>
+              <div class="valeur" style="color:#88a">—</div>
+              <div class="unite">indisponible</div>
+            </div>`;
+        }
+      });
+
+      grille.innerHTML = html || '<div class="erreur">Aucune donnée disponible pour le moment.</div>';
+
+      if (derniereDate) {
+        const d = new Date(derniereDate);
+        const opts = { day:"2-digit", month:"2-digit", hour:"2-digit", minute:"2-digit" };
+        document.getElementById("maj").textContent =
+          "Mesure du " + d.toLocaleString("fr-FR", opts);
+      }
+    } catch(e) {
+      grille.innerHTML = '<div class="erreur">Impossible de contacter AtmoSud. Nouvel essai dans 10 min.</div>';
+    }
+  }
+
+  charger();
+  setInterval(charger, 10 * 60 * 1000); // toutes les 10 minutes
+</script>
 </body>
 </html>
