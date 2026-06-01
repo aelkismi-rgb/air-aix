@@ -74,7 +74,8 @@
   .prev-info .d{color:var(--txt-doux);font-size:0.75vw;}
 
   .reco{background:var(--carte);border:1px solid var(--bord);border-radius:12px;
-    padding:1.4vh 1.2vw;font-size:0.92vw;line-height:1.5;color:#dceaf7;}
+    padding:1.4vh 1.2vw;font-size:0.85vw;line-height:1.45;color:#dceaf7;
+    overflow-y:auto;}
   .reco b{color:#4db8ff;}
 
   footer{margin-top:1.6vh;display:flex;justify-content:space-between;align-items:center;}
@@ -172,12 +173,24 @@
           <div class="prev-info"><div class="d">${jour(dt)}</div><div>${pv.qualificatif}</div></div>
         </div>`;});
 
+      // Recuperer le vrai commentaire officiel AtmoSud du jour
+      let commentaire = RECO[niveau] || "";   // repli si l'API commentaire echoue
+      try{
+        const today = troisDates().split(",")[0];
+        const rc = await fetch(
+          "https://api.atmosud.org/prevision/commentaires/?dates_echeance="
+          + today + "&token=" + TOKEN);
+        const dc = await rc.json();
+        if(dc && dc[today]) commentaire = dc[today];
+      }catch(e){}
+
       droite.innerHTML=`
         <div><div class="sous-titre">Détail par polluant</div>
           <div class="polluants">${polsHtml}</div></div>
         <div><div class="sous-titre">Prévisions</div>
           <div class="prev">${prevHtml}</div></div>
-        <div class="reco">${RECO[niveau]||""}</div>`;
+        <div><div class="sous-titre">Bulletin du jour</div>
+          <div class="reco">${commentaire}</div></div>`;
 
       document.getElementById("legende").innerHTML=
         ECHELLE.map(e=>`<div class="leg"><div class="leg-c" style="background:${e.c}"></div>${e.n}</div>`).join("");
