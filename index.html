@@ -14,58 +14,63 @@
   html,body{width:100%;height:100%;font-family:"Segoe UI",Tahoma,sans-serif;
     background:radial-gradient(circle at 25% 15%,var(--fond2),var(--fond1));
     color:var(--txt);overflow:hidden;}
-  .page{width:100%;height:100%;display:flex;flex-direction:column;padding:3vh 3vw;}
-  header{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:1.8vh;}
-  h1{font-size:2.6vw;font-weight:700;letter-spacing:-1px;}
+  .page{width:100%;height:100%;display:flex;flex-direction:column;padding:2.3vh 2.8vw;}
+  header{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:1.3vh;}
+  h1{font-size:2.3vw;font-weight:700;letter-spacing:-1px;}
   h1 span{color:#4db8ff;}
-  .lieu{font-size:1.2vw;color:var(--txt-doux);margin-top:0.3vh;}
-  .maj{font-size:1vw;color:var(--txt-doux);text-align:right;}
+  .lieu{font-size:1.05vw;color:var(--txt-doux);margin-top:0.3vh;}
+  .maj{font-size:0.9vw;color:var(--txt-doux);text-align:right;}
+  .meteo-tag{font-size:1vw;color:#fff;margin-top:0.4vh;}
 
-  .corps{flex:1;display:flex;gap:2.5vw;align-items:center;min-height:0;}
+  .corps{flex:1;display:flex;gap:2.3vw;align-items:center;min-height:0;}
 
-  /* ===== Jauge recreee (donnees officielles API) ===== */
-  .jauge-bloc{flex:0 0 36%;display:flex;flex-direction:column;align-items:center;justify-content:center;}
-  .jauge{position:relative;width:22vw;height:22vw;}
-  .jauge svg{width:100%;height:100%;transform:rotate(-90deg);}
-  .jauge-centre{position:absolute;inset:0;display:flex;flex-direction:column;
-    align-items:center;justify-content:center;text-align:center;padding:0 2vw;}
-  .jauge-qualif{font-size:2.4vw;font-weight:800;line-height:1.05;}
-  .jauge-sous{font-size:1vw;color:var(--txt-doux);margin-top:1vh;}
-  .etat-bandeau{
-    margin-top:2.5vh;padding:1vh 2vw;border-radius:999px;
-    font-size:1.3vw;font-weight:700;color:#06121f;text-align:center;
-  }
-  .tendance{margin-top:1.8vh;font-size:1.05vw;color:var(--txt-doux);text-align:center;}
+  /* Demi-jauge a aiguille */
+  .jauge-bloc{flex:0 0 30%;display:flex;flex-direction:column;align-items:center;justify-content:center;}
+  .jauge{position:relative;width:22vw;}
+  .jauge svg{width:100%;height:auto;display:block;}
+  .jauge-qualif{font-size:1.9vw;font-weight:800;line-height:1;margin-top:0.8vh;text-align:center;}
+  .jauge-sous{font-size:0.9vw;color:var(--txt-doux);margin-top:0.5vh;text-align:center;}
+  .tendance{margin-top:1.3vh;font-size:0.95vw;color:var(--txt-doux);text-align:center;}
   .tendance b{color:#fff;}
 
+  /* Verdict course */
+  .course{margin-top:1.8vh;width:90%;border-radius:14px;padding:1.4vh 1vw;
+    text-align:center;border:2px solid var(--cc,#888);background:rgba(255,255,255,0.05);}
+  .course-ico{font-size:2.2vw;line-height:1;}
+  .course-txt{font-size:1.05vw;font-weight:700;margin-top:0.5vh;color:var(--cc,#fff);}
+  .course-det{font-size:0.78vw;color:var(--txt-doux);margin-top:0.4vh;line-height:1.3;}
+
   /* Colonne droite */
-  .droite{flex:1;display:flex;flex-direction:column;gap:1.8vh;min-height:0;}
-  .sous-titre{font-size:1.2vw;font-weight:600;color:var(--txt-doux);margin-bottom:0.5vh;}
-  .polluants{display:grid;grid-template-columns:repeat(5,1fr);gap:0.9vw;}
-  .pol{background:var(--carte);border:1px solid var(--bord);border-radius:12px;
-    padding:1.4vh 0.4vw;text-align:center;border-top:5px solid var(--c,#888);}
-  .pol-nom{font-size:1vw;font-weight:700;}
-  .pol-qual{font-size:0.8vw;color:var(--txt-doux);margin-top:0.5vh;}
-  .pol-oms{font-size:0.65vw;color:#7d97b3;margin-top:0.7vh;line-height:1.3;}
+  .droite{flex:1;display:flex;flex-direction:column;gap:1.2vh;min-height:0;}
+  .sous-titre{font-size:1.05vw;font-weight:600;color:var(--txt-doux);margin-bottom:0.3vh;}
+  .polluants{display:grid;grid-template-columns:repeat(5,1fr);gap:0.7vw;}
+  .pol{background:var(--carte);border:1px solid var(--bord);border-radius:10px;
+    padding:0.9vh 0.3vw;text-align:center;border-top:4px solid var(--c,#888);}
+  .pol-nom{font-size:0.9vw;font-weight:700;}
+  .pol-qual{font-size:0.7vw;color:var(--txt-doux);margin-top:0.3vh;}
+  .pol-oms{font-size:0.58vw;color:#7d97b3;margin-top:0.5vh;line-height:1.2;}
 
-  .prev{display:flex;gap:1.2vw;}
+  .prev{display:flex;gap:0.9vw;}
   .prev-jour{flex:1;background:var(--carte);border:1px solid var(--bord);
-    border-radius:11px;padding:1.1vh 0.9vw;display:flex;align-items:center;gap:0.8vw;}
-  .prev-pastille{width:1.5vw;height:1.5vw;border-radius:50%;flex:0 0 auto;}
-  .prev-info{font-size:0.9vw;}
-  .prev-info .d{color:var(--txt-doux);font-size:0.75vw;}
+    border-radius:9px;padding:0.8vh 0.7vw;display:flex;align-items:center;gap:0.6vw;}
+  .prev-pastille{width:1.3vw;height:1.3vw;border-radius:50%;flex:0 0 auto;}
+  .prev-info{font-size:0.8vw;}
+  .prev-info .d{color:var(--txt-doux);font-size:0.68vw;}
 
-  .reco{background:var(--carte);border:1px solid var(--bord);border-radius:12px;
-    padding:1.4vh 1.2vw;font-size:0.85vw;line-height:1.45;color:#dceaf7;overflow-y:auto;}
-  .reco b{color:#4db8ff;}
+  .conseils{display:grid;grid-template-columns:repeat(2,1fr);gap:0.7vw;}
+  .conseil{background:var(--carte);border:1px solid var(--bord);border-radius:10px;
+    padding:0.9vh 0.8vw;display:flex;gap:0.7vw;align-items:flex-start;}
+  .conseil-ico{font-size:1.5vw;line-height:1;flex:0 0 auto;}
+  .conseil-txt h4{font-size:0.85vw;color:#4db8ff;margin-bottom:0.25vh;}
+  .conseil-txt p{font-size:0.68vw;line-height:1.3;color:#dceaf7;}
 
-  footer{margin-top:1.6vh;display:flex;justify-content:space-between;align-items:center;}
+  footer{margin-top:1.2vh;display:flex;justify-content:space-between;align-items:center;}
   .legende{display:flex;gap:0.5vw;flex-wrap:wrap;}
-  .leg{display:flex;align-items:center;gap:0.4vw;font-size:0.78vw;color:var(--txt-doux);}
-  .leg-c{width:0.9vw;height:0.9vw;border-radius:3px;}
-  .source{font-size:0.78vw;color:var(--txt-doux);}
-  .chargement{font-size:1.1vw;color:var(--txt-doux);padding:3vh;}
-  .erreur{font-size:1.1vw;color:#ff9b9b;padding:3vh;}
+  .leg{display:flex;align-items:center;gap:0.4vw;font-size:0.72vw;color:var(--txt-doux);}
+  .leg-c{width:0.8vw;height:0.8vw;border-radius:3px;}
+  .source{font-size:0.72vw;color:var(--txt-doux);}
+  .chargement{font-size:1vw;color:var(--txt-doux);padding:3vh;}
+  .erreur{font-size:1vw;color:#ff9b9b;padding:3vh;}
 </style>
 </head>
 <body>
@@ -75,16 +80,16 @@
         <h1>Qualité de l'<span>air</span></h1>
         <div class="lieu">Rousset (13087) — indice ATMO officiel</div>
       </div>
-      <div class="maj" id="maj">Chargement…</div>
+      <div style="text-align:right">
+        <div class="maj" id="maj">Chargement…</div>
+        <div class="meteo-tag" id="meteo-tag"></div>
+      </div>
     </header>
 
     <div class="corps">
-      <!-- Jauge recreee -->
       <div class="jauge-bloc" id="jauge-bloc">
         <div class="chargement">Chargement…</div>
       </div>
-
-      <!-- Ajouts API -->
       <div class="droite" id="droite">
         <div class="chargement">Chargement des détails AtmoSud…</div>
       </div>
@@ -92,13 +97,14 @@
 
     <footer>
       <div class="legende" id="legende"></div>
-      <div class="source">Source : AtmoSud · maj auto 30 min</div>
+      <div class="source">Source : AtmoSud + Open-Meteo · maj auto 30 min</div>
     </footer>
   </div>
 
 <script>
   const TOKEN="bcfe08c69ccc3507bb36f3ce76dafcef";
   const INSEE="13087";
+  const LAT=43.4435, LON=5.6149; // Rousset
 
   const ECHELLE=[
     {n:"Bon",c:"#50F0E6"},{n:"Moyen",c:"#50CCAA"},{n:"Dégradé",c:"#F0E641"},
@@ -111,58 +117,229 @@
     {k:"no2",nom:"NO₂",oms:"OMS 24h : 25 µg/m³"},
     {k:"so2",nom:"SO₂",oms:"OMS 24h : 40 µg/m³"}
   ];
-  const RECO={
-    1:"Qualité de l'air <b>bonne</b> : profitez de vos activités de plein air sans restriction.",
-    2:"Qualité de l'air <b>moyenne</b> : aucune restriction, activités de plein air possibles.",
-    3:"Qualité de l'air <b>dégradée</b> : les personnes sensibles peuvent ressentir une gêne. Privilégiez les parcs et zones peu circulantes pour le sport ; aérez aux heures les moins polluées.",
-    4:"Qualité de l'air <b>mauvaise</b> : personnes sensibles, limitez les activités physiques intenses en extérieur.",
-    5:"Qualité de l'air <b>très mauvaise</b> : évitez les efforts physiques intenses dehors.",
-    6:"Qualité de l'air <b>extrêmement mauvaise</b> : limitez au maximum les sorties et efforts en extérieur."
-  };
+
+  // ===== Verdict "peut-on courir ?" en croisant AIR + METEO =====
+  function verdictCourse(niveau, temp, pluie, vent){
+    // Score base sur plusieurs facteurs. On part de "ideal" et on degrade.
+    let probleme = [];
+    let gravite = 0; // 0 ok, 1 prudence, 2 deconseille
+
+    if(niveau>=4){ gravite=2; probleme.push("air mauvais"); }
+    else if(niveau===3){ gravite=Math.max(gravite,1); probleme.push("air dégradé"); }
+
+    if(temp>=33){ gravite=2; probleme.push("forte chaleur ("+Math.round(temp)+"°C)"); }
+    else if(temp>=29){ gravite=Math.max(gravite,1); probleme.push("chaleur ("+Math.round(temp)+"°C)"); }
+    else if(temp<=2){ gravite=Math.max(gravite,1); probleme.push("froid ("+Math.round(temp)+"°C)"); }
+
+    if(pluie>=3){ gravite=Math.max(gravite,1); probleme.push("pluie"); }
+
+    if(vent>=40){ gravite=Math.max(gravite,1); probleme.push("vent fort"); }
+
+    if(gravite===0){
+      return {ico:"🟢🏃", txt:"Idéal pour courir",
+        det:"Air de bonne qualité, météo favorable ("+Math.round(temp)+"°C). Profitez-en !",
+        couleur:"#50F0E6"};
+    } else if(gravite===1){
+      return {ico:"🟠🏃", txt:"Course possible avec prudence",
+        det:"Conditions à surveiller : "+probleme.join(", ")+". Adaptez l'intensité et l'horaire.",
+        couleur:"#F0E641"};
+    } else {
+      return {ico:"🔴🚫", txt:"Course déconseillée",
+        det:"Conditions défavorables : "+probleme.join(", ")+". Reportez ou choisissez l'intérieur.",
+        couleur:"#FF5050"};
+    }
+  }
+
+  // Petit utilitaire : choisit un element d'une liste de facon stable pour la journee
+  function choixDuJour(liste, decalage){
+    const j = Math.floor(Date.now()/86400000) + (decalage||0);
+    return liste[j % liste.length];
+  }
+
+  // ===== Conseils contextuels : croisent niveau d'air + polluant dominant + meteo + saison =====
+  // majoritaire : tableau des polluants responsables (ex ["o3"]) renvoye par l'API
+  function conseils(niveau, temp, pluie, vent, majoritaire){
+    const mois = new Date().getMonth()+1;        // 1-12
+    const ete = (mois>=5 && mois<=9);
+    const hiver = (mois<=3 || mois>=11);
+    const dom = (majoritaire && majoritaire[0]) ? majoritaire[0].toLowerCase() : "";
+    const ozone = dom.includes("o3");
+    const particules = dom.includes("pm");
+
+    // --- ACTIVITE PHYSIQUE ---
+    let activite;
+    if(niveau>=4){
+      activite = choixDuJour([
+        "Reportez si possible le sport intense en extérieur. Préférez une activité douce ou en intérieur.",
+        "Évitez les efforts physiques prolongés dehors aujourd'hui ; privilégiez l'intérieur bien ventilé."
+      ]);
+    } else if(ozone && ete){
+      activite = "Pic d'ozone l'après-midi : faites votre sport tôt le matin ou en soirée, à l'ombre.";
+    } else if(niveau===3){
+      activite = "Privilégiez les parcs, les zones piétonnes et les rues peu circulantes pour vos activités de plein air.";
+    } else {
+      activite = choixDuJour([
+        "Conditions favorables : profitez des parcs et espaces verts pour vos activités de plein air.",
+        "Bon moment pour bouger dehors : marche, course ou vélo dans les zones vertes."
+      ]);
+    }
+
+    // --- PERSONNES SENSIBLES ---
+    let sensibles;
+    if(niveau>=4){
+      sensibles = "Personnes sensibles : limitez les sorties et consultez un professionnel de santé en cas de gêne.";
+    } else if(particules && hiver){
+      sensibles = "Particules fines élevées : les personnes sensibles évitent les abords des routes et le chauffage au bois.";
+    } else if(niveau>=3){
+      sensibles = "N'aggravez pas les effets de la pollution en ajoutant des facteurs irritants (tabac, solvants, fumée de cheminée, pollens, etc.).";
+    } else {
+      sensibles = "Aucune précaution particulière, mais évitez les facteurs irritants (tabac, fumée, solvants).";
+    }
+
+    // --- DEPLACEMENTS ---
+    let deplacements;
+    if(niveau>=3){
+      deplacements = choixDuJour([
+        "Privilégiez les transports en commun, le covoiturage ou le vélo pour réduire la pollution.",
+        "À vélo, placez-vous devant les voitures au feu rouge et gardez vos distances derrière un véhicule motorisé."
+      ]);
+    } else {
+      deplacements = choixDuJour([
+        "Pour les trajets courts, préférez la marche ou le vélo plutôt que la voiture.",
+        "À vélo, placez-vous devant les voitures au feu rouge et gardez vos distances derrière un véhicule motorisé."
+      ]);
+    }
+
+    // --- AIR INTERIEUR ---
+    let airint;
+    if(pluie>=3){
+      airint = "La pluie assainit l'air extérieur : c'est le moment d'aérer largement votre intérieur.";
+    } else if(niveau>=4){
+      airint = "Aérez brièvement aux heures les moins polluées (tôt le matin), puis refermez.";
+    } else if(hiver){
+      airint = "Aérez 10 min matin et soir, même en hiver : l'air intérieur est souvent plus pollué que l'extérieur.";
+    } else {
+      airint = "L'aération et la ventilation sont les moyens les plus efficaces d'améliorer votre air intérieur.";
+    }
+
+    // --- CONSEIL DU JOUR : pool contextuel selon saison / polluant / chaleur ---
+    let pool = [
+      "Utilisez des produits ménagers labellisés (Ecocert, NF Environnement, Ecolabel) et sans symbole de danger.",
+      "Choisissez des peintures, colles et meubles étiquetés A+ pour limiter les polluants intérieurs.",
+      "Limitez les bougies parfumées et l'encens, sources de particules fines à l'intérieur."
+    ];
+    if(ete && ozone){
+      pool = pool.concat([
+        "Ozone : limitez la voiture aux heures chaudes, l'essence s'évapore et nourrit la pollution.",
+        "Faites le plein de carburant le soir : moins d'évaporation, moins d'ozone formé.",
+        "Tondez la pelouse en soirée plutôt qu'en pleine chaleur pour limiter les émissions."
+      ]);
+    }
+    if(hiver && particules){
+      pool = pool.concat([
+        "Chauffage au bois : utilisez un appareil performant (label Flamme Verte) et du bois bien sec.",
+        "Évitez le brûlage des déchets verts : interdit et très émetteur de particules fines.",
+        "Réglez votre chauffage à 19°C : bon pour l'air, la santé et la facture."
+      ]);
+    }
+    if(temp>=32){
+      pool = pool.concat([
+        "Forte chaleur : hydratez-vous, restez au frais aux heures chaudes et fermez les volets le jour.",
+        "Canicule et ozone vont souvent ensemble : reportez les efforts physiques à la fraîche."
+      ]);
+    }
+    if(temp<=3){
+      pool = pool.concat([
+        "Grand froid : évitez de faire tourner le moteur à l'arrêt pour préchauffer la voiture.",
+        "Limitez les feux de cheminée d'agrément, fortement émetteurs de particules."
+      ]);
+    }
+    pool = pool.concat([
+      "Privilégiez le covoiturage ou les transports en commun pour vos trajets domicile-travail.",
+      "Entretenez régulièrement votre chaudière et vos appareils de combustion.",
+      "Plantez et préservez la végétation : elle aide à capter une partie des polluants."
+    ]);
+    const conseilJour = choixDuJour(pool, niveau); // varie selon le jour ET le niveau
+
+    return [
+      {i:"🏃",t:"Activité physique",p:activite},
+      {i:"🫁",t:"Personnes sensibles",p:sensibles},
+      {i:"🚲",t:"Déplacements",p:deplacements},
+      {i:"🏠",t:"Air intérieur",p:airint},
+      {i:"💡",t:"Conseil du jour",p:conseilJour}
+    ];
+  }
 
   function jour(s){const d=new Date(s+"T12:00:00");
     return d.toLocaleDateString("fr-FR",{weekday:"short",day:"2-digit",month:"short"});}
   function troisDates(){const o=[];for(let i=0;i<3;i++){const d=new Date();
     d.setDate(d.getDate()+i);o.push(d.toISOString().slice(0,10));}return o.join(",");}
 
+  function demiJauge(niveau){
+    const cx=100, cy=100, r=80;
+    let segs="";
+    for(let i=0;i<6;i++){
+      const a0=180-i*30, a1=180-(i+1)*30;
+      const r0=a0*Math.PI/180, r1=a1*Math.PI/180;
+      const x0=cx+r*Math.cos(r0), y0=cy-r*Math.sin(r0);
+      const x1=cx+r*Math.cos(r1), y1=cy-r*Math.sin(r1);
+      segs+=`<path d="M ${x0} ${y0} A ${r} ${r} 0 0 1 ${x1} ${y1}"
+        fill="none" stroke="${ECHELLE[i].c}" stroke-width="18"/>`;
+    }
+    const angle=180-(niveau-0.5)*30;
+    const rad=angle*Math.PI/180;
+    const ax=cx+(r-8)*Math.cos(rad), ay=cy-(r-8)*Math.sin(rad);
+    return `<svg viewBox="0 0 200 118">${segs}
+      <line x1="${cx}" y1="${cy}" x2="${ax}" y2="${ay}" stroke="#fff" stroke-width="3.5" stroke-linecap="round"/>
+      <circle cx="${cx}" cy="${cy}" r="7" fill="#fff"/></svg>`;
+  }
+
+  async function getMeteo(){
+    try{
+      const u="https://api.open-meteo.com/v1/forecast?latitude="+LAT+"&longitude="+LON
+        +"&current=temperature_2m,precipitation,wind_speed_10m&timezone=Europe%2FParis";
+      const r=await fetch(u);const d=await r.json();
+      return {temp:d.current.temperature_2m, pluie:d.current.precipitation,
+              vent:d.current.wind_speed_10m};
+    }catch(e){ return {temp:20, pluie:0, vent:0}; }
+  }
+
   async function charger(){
     const jbloc=document.getElementById("jauge-bloc");
     const droite=document.getElementById("droite");
-    const url="https://api.atmosud.org/iqa2021/commune/indices/journalier"
-      +"?insee="+INSEE+"&indice=all&format_indice=valeur,qualificatif,couleur"
-      +"&dates_echeances="+troisDates()+"&token="+TOKEN;
     try{
-      const r=await fetch(url);const data=await r.json();
+      const url="https://api.atmosud.org/iqa2021/commune/indices/journalier"
+        +"?insee="+INSEE+"&indice=all&format_indice=valeur,qualificatif,couleur"
+        +"&dates_echeances="+troisDates()+"&token="+TOKEN;
+      const [r, meteo]=await Promise.all([fetch(url), getMeteo()]);
+      const data=await r.json();
       const bloc=data[INSEE];if(!bloc||!bloc.valeurs)throw new Error("vide");
       const dates=Object.keys(bloc.valeurs).sort();
       const auj=bloc.valeurs[dates[0]];
       const ind=auj.indice;const niveau=ind.valeur;
-      const circ=2*Math.PI*42;const pct=niveau/6;
 
-      // tendance pour demain
+      document.getElementById("meteo-tag").textContent=
+        "🌡️ "+Math.round(meteo.temp)+"°C"+(meteo.pluie>=0.2?" · 🌧️ pluie":"");
+
       let tendanceHtml="";
       if(dates[1]&&bloc.valeurs[dates[1]]){
         const dem=bloc.valeurs[dates[1]].indice;
         tendanceHtml=`<div class="tendance">Tendance demain : <b>${dem.qualificatif}</b></div>`;
       }
 
-      // ===== JAUGE =====
-      jbloc.innerHTML=`
-        <div class="jauge">
-          <svg viewBox="0 0 100 100">
-            <circle cx="50" cy="50" r="42" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="10"/>
-            <circle cx="50" cy="50" r="42" fill="none" stroke="${ind.couleur}" stroke-width="10"
-              stroke-linecap="round" stroke-dasharray="${circ}" stroke-dashoffset="${circ*(1-pct)}"/>
-          </svg>
-          <div class="jauge-centre">
-            <div class="jauge-qualif" style="color:${ind.couleur}">${ind.qualificatif}</div>
-            <div class="jauge-sous">Indice ATMO ${ind.valeur}/6</div>
-          </div>
-        </div>
-        <div class="etat-bandeau" style="background:${ind.couleur}">${ind.qualificatif}</div>
-        ${tendanceHtml}`;
+      const vc=verdictCourse(niveau, meteo.temp, meteo.pluie, meteo.vent);
 
-      // ===== POLLUANTS =====
+      jbloc.innerHTML=`
+        <div class="jauge">${demiJauge(niveau)}</div>
+        <div class="jauge-qualif" style="color:${ind.couleur}">${ind.qualificatif}</div>
+        <div class="jauge-sous">Indice ATMO ${ind.valeur}/6</div>
+        ${tendanceHtml}
+        <div class="course" style="--cc:${vc.couleur}">
+          <div class="course-ico">${vc.ico}</div>
+          <div class="course-txt">${vc.txt}</div>
+          <div class="course-det">${vc.det}</div>
+        </div>`;
+
       let polsHtml="";
       POLS.forEach(p=>{const v=auj[p.k];if(v){
         polsHtml+=`<div class="pol" style="--c:${v.couleur}">
@@ -170,7 +347,6 @@
           <div class="pol-qual">${v.qualificatif}</div>
           <div class="pol-oms">${p.oms}</div></div>`;}});
 
-      // ===== PREVISIONS =====
       let prevHtml="";
       dates.slice(1,3).forEach(dt=>{const pv=bloc.valeurs[dt].indice;
         prevHtml+=`<div class="prev-jour">
@@ -178,23 +354,20 @@
           <div class="prev-info"><div class="d">${jour(dt)}</div><div>${pv.qualificatif}</div></div>
         </div>`;});
 
-      // ===== COMMENTAIRE OFFICIEL =====
-      let commentaire=RECO[niveau]||"";
-      try{
-        const today=troisDates().split(",")[0];
-        const rc=await fetch("https://api.atmosud.org/prevision/commentaires/?dates_echeance="
-          +today+"&token="+TOKEN);
-        const dc=await rc.json();
-        if(dc&&dc[today]) commentaire=dc[today];
-      }catch(e){}
+      let consHtml="";
+      conseils(niveau, meteo.temp, meteo.pluie, meteo.vent, auj.majoritaire).forEach(c=>{
+        consHtml+=`<div class="conseil">
+          <div class="conseil-ico">${c.i}</div>
+          <div class="conseil-txt"><h4>${c.t}</h4><p>${c.p}</p></div></div>`;
+      });
 
       droite.innerHTML=`
         <div><div class="sous-titre">Détail par polluant</div>
           <div class="polluants">${polsHtml}</div></div>
         <div><div class="sous-titre">Prévisions</div>
           <div class="prev">${prevHtml}</div></div>
-        <div><div class="sous-titre">Bulletin du jour</div>
-          <div class="reco">${commentaire}</div></div>`;
+        <div><div class="sous-titre">Recommandations du jour</div>
+          <div class="conseils">${consHtml}</div></div>`;
 
       document.getElementById("legende").innerHTML=
         ECHELLE.map(e=>`<div class="leg"><div class="leg-c" style="background:${e.c}"></div>${e.n}</div>`).join("");
