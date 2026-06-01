@@ -23,11 +23,38 @@
 
   .corps{flex:1;display:flex;gap:2.5vw;align-items:stretch;min-height:0;}
 
-  /* Widget officiel AtmoSud a gauche */
+  /* ===== Widget officiel : on ne montre QUE le compteur (le rond) ===== */
   .widget-bloc{flex:0 0 38%;display:flex;flex-direction:column;}
-  .cadre-widget{flex:1;background:#fff;border-radius:20px;overflow:hidden;
-    box-shadow:0 12px 40px rgba(0,0,0,0.3);}
-  .cadre-widget iframe{width:100%;height:100%;border:0;display:block;}
+  .cadre-widget{
+    flex:1;background:#fff;border-radius:20px;overflow:hidden;
+    box-shadow:0 12px 40px rgba(0,0,0,0.3);
+    display:flex;align-items:center;justify-content:center;
+  }
+  /*
+    FENETRE DECOUPE : on cache tout sauf le haut du widget (la jauge).
+    --visible  = hauteur de la zone du widget qu'on laisse voir (le compteur).
+                 Si vous voyez trop (les conseils apparaissent) -> DIMINUEZ (ex 360).
+                 Si la jauge est coupee en bas -> AUGMENTEZ (ex 460).
+    --decalage = de combien on remonte le widget pour cadrer la jauge.
+                 Mettez 0 pour commencer. Si un bandeau/titre inutile depasse
+                 en haut, augmentez un peu (ex 40, 60).
+  */
+  .fenetre{
+    --visible:400px;
+    --decalage:0px;
+    width:100%;
+    height:var(--visible);
+    overflow:hidden;
+    position:relative;
+  }
+  .fenetre iframe{
+    width:100%;
+    height:1100px;            /* hauteur totale reelle du widget */
+    border:0;
+    position:absolute;
+    top:calc(-1 * var(--decalage));
+    left:0;
+  }
 
   /* Colonne droite : ajouts API */
   .droite{flex:1;display:flex;flex-direction:column;gap:1.8vh;min-height:0;}
@@ -70,10 +97,12 @@
     </header>
 
     <div class="corps">
-      <!-- Widget officiel AtmoSud -->
+      <!-- Widget officiel : seulement le compteur -->
       <div class="widget-bloc">
         <div class="cadre-widget">
-          <iframe src="https://www.atmosud.org/widget-mon-air/widget/commune/13087"></iframe>
+          <div class="fenetre">
+            <iframe src="https://www.atmosud.org/widget-mon-air/widget/commune/13087"></iframe>
+          </div>
         </div>
       </div>
 
