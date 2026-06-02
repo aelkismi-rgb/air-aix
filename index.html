@@ -389,7 +389,7 @@
       document.getElementById("legende").innerHTML=
         ECHELLE.map(e=>`<div class="leg"><div class="leg-c" style="background:${e.c}"></div>${e.n}</div>`).join("");
       document.getElementById("maj").textContent=
-        "Diffusé le "+new Date(auj.date_diffusion).toLocaleDateString("fr-FR");
+        new Date().toLocaleDateString("fr-FR",{day:"2-digit",month:"2-digit",year:"numeric"})+" · "+new Date().toLocaleTimeString("fr-FR",{hour:"2-digit",minute:"2-digit"});
     }catch(e){
       jbloc.innerHTML='<div class="erreur">Indisponible.</div>';
       droite.innerHTML='<div class="erreur">Détails indisponibles. Nouvel essai dans 30 min.</div>';
@@ -397,6 +397,11 @@
   }
   charger();
   setInterval(charger,30*60*1000);
+  // Garde la date du jour exacte meme si l'ecran tourne en continu
+  setInterval(function(){
+    const el=document.getElementById("maj");
+    if(el) el.textContent=new Date().toLocaleDateString("fr-FR",{day:"2-digit",month:"2-digit",year:"numeric"})+" · "+new Date().toLocaleTimeString("fr-FR",{hour:"2-digit",minute:"2-digit"});
+  }, 60*1000);
 </script>
 </body>
 </html>
