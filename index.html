@@ -207,10 +207,36 @@
     const airOk = niveau<=2;
 
     let activite, actOk;
-    if(niveau>=4){activite=choixDuJour(["Reportez le sport intense en extérieur ; préférez une activité douce ou en intérieur.","Évitez les efforts prolongés dehors aujourd'hui.","Privilégiez une activité calme et limitez le temps passé dehors."]);actOk=false;}
-    else if(ozone&&ete){activite=choixDuJour(["Pic d'ozone l'après-midi : faites votre sport tôt le matin ou en soirée, à l'ombre.","Évitez l'effort intense entre 12h et 18h, quand l'ozone est au plus haut."]);actOk=false;}
-    else if(niveau===3){activite=choixDuJour(["Privilégiez les parcs, les zones piétonnes et les rues peu circulantes pour vos activités de plein air.","Faites du sport loin du trafic : parcs, chemins, bords de rivière."]);actOk=false;}
-    else {activite=choixDuJour(["Conditions favorables : profitez des parcs et espaces verts pour vos activités de plein air.","Bon moment pour bouger dehors : marche, course ou vélo dans les zones vertes.","Air de bonne qualité : idéal pour une sortie sportive en plein air."]);actOk=true;}
+    if(niveau>=4){
+      // Air mauvais : on deconseille -> exclamation
+      activite=choixDuJour([
+        "Reportez le sport intense en extérieur ; préférez une activité douce ou en intérieur.",
+        "Évitez les efforts prolongés dehors aujourd'hui.",
+        "Privilégiez une activité calme et limitez le temps passé dehors.",
+        "Mieux vaut reporter la course : optez pour une séance en salle aujourd'hui."
+      ], niveau);
+      actOk=false;
+    } else if(niveau===3){
+      // Air degrade : prudence -> exclamation, phrases ozone / loin du trafic
+      activite=choixDuJour([
+        "Évitez l'effort intense entre 12h et 18h, quand l'ozone est au plus haut.",
+        "Pic d'ozone l'après-midi : faites votre sport tôt le matin ou en soirée, à l'ombre.",
+        "Faites du sport loin du trafic : parcs, chemins, bords de rivière.",
+        "Adaptez l'intensité et préférez les heures fraîches pour votre activité.",
+        "Privilégiez les zones peu circulantes et limitez les efforts très intenses."
+      ], niveau);
+      actOk=false;
+    } else {
+      // Air bon / ideal pour courir : phrases positives -> check
+      activite=choixDuJour([
+        "Privilégiez les parcs, les zones piétonnes et les rues peu circulantes pour vos activités de plein air.",
+        "Conditions favorables : profitez des parcs et espaces verts pour vos activités de plein air.",
+        "Bon moment pour bouger dehors : marche, course ou vélo dans les zones vertes.",
+        "Air de bonne qualité : idéal pour une sortie sportive en plein air.",
+        "Profitez-en pour courir ou marcher : l'air est sain aujourd'hui."
+      ], niveau);
+      actOk=true;
+    }
 
     let sensibles, sensOk;
     if(niveau>=4){sensibles=choixDuJour(["Personnes sensibles : limitez les sorties et consultez un professionnel en cas de gêne.","Personnes sensibles : réduisez les efforts et restez attentif aux symptômes (toux, essoufflement).","En cas de gêne respiratoire ou cardiaque, prendre conseil auprès d'un professionnel de santé.","Enfants, personnes âgées, femmes enceintes, asthmatiques, diabétiques et insuffisants cardiaques : redoublez de prudence aujourd'hui."]);sensOk=false;}
